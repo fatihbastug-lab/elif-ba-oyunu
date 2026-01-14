@@ -78,4 +78,32 @@
         if(mod == 'ustun') { t = HARFLER[i] + "َ"; n = ISIMLER[i] + " Üstün"; s = S_URL + (i+11) + ".mp3"; }
         if(mod == 'esre') { t = HARFLER[i] + "ِ"; n = ISIMLER[i] + " Esre"; s = S_URL + (i+11) + "b.mp3"; }
         if(mod == 'otre') { t = HARFLER[i] + "ُ"; n = ISIMLER[i] + " Ötre"; s = S_URL + (i+11) + "c.mp3"; }
-        if(mod == 'sedde') { t = "ا" + HARFLER[i] + "َّ"; n = ISIMLER[i] + " Şedde"; s =
+        if(mod == 'sedde') { t = "ا" + HARFLER[i] + "َّ"; n = ISIMLER[i] + " Şedde"; s = S_URL + "16.mp3"; }
+        if(mod == 'dua') { 
+            let dlar = [["Sübhâneke","subhaneke.mp3"],["Fatiha","fatiha.mp3"],["İhlas","ihlas.mp3"],["Kevser","kevser.mp3"]];
+            t = "🤲"; n = dlar[i][0]; s = D_URL + dlar[i][1];
+        }
+        document.getElementById('char-area').innerText = t;
+        document.getElementById('char-name').innerText = n;
+        document.getElementById('char-area').dataset.src = s;
+        if(kilitAcildi) sesiOynat();
+    }
+
+    function sesiOynat() {
+        let dosya = document.getElementById('char-area').dataset.src;
+        if(dosya) {
+            let audio = new Audio(dosya);
+            audio.play().catch(err => {
+                alert("Lütfen telefonun yanındaki sessiz modu (tuşu) kapatın ve sesini açın!");
+            });
+        }
+    }
+
+    function atla(d) {
+        let sinir = (mod == 'dua') ? 4 : 28;
+        i = (i + d + sinir) % sinir;
+        guncelle();
+    }
+</script>
+</body>
+</html>
