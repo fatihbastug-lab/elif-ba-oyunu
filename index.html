@@ -1,39 +1,171 @@
-<div id="game-container" style="position:relative; height:400px; background:#fff; overflow:hidden; border-radius:20px;">
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Elif-Ba Dünyası</title>
+    <style>
+        :root {
+            --ana-renk: #6c5ce7;
+            --arka-plan: #f0f3f7;
+            --kart-bg: #ffffff;
+            --pembis: #fd79a8;
+        }
+        body { 
+            margin: 0; font-family: 'Segoe UI', Tahoma, sans-serif; 
+            background: var(--arka-plan); color: #2d3436; 
+            overflow-x: hidden; -webkit-tap-highlight-color: transparent;
+        }
+        
+        /* Arka Plan Süslemesi */
+        .bg-pattern {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-image: radial-gradient(#dcdde1 1px, transparent 1px);
+            background-size: 20px 20px; z-index: -1;
+        }
+
+        /* Profil ve Karşılama */
+        .header {
+            background: linear-gradient(135deg, var(--ana-renk), #a29bfe);
+            padding: 30px 20px; border-bottom-left-radius: 50px;
+            border-bottom-right-radius: 50px; color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .avatar-box { position: relative; display: inline-block; }
+        .avatar {
+            width: 130px; height: 130px; border: 6px solid white;
+            border-radius: 50%; object-fit: cover;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .crown { position: absolute; top: -20px; left: 50%; transform: translateX(-50%) rotate(-10deg); font-size: 40px; }
+
+        /* Oyun Haritası (Müfredat Adımları) */
+        .map {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px; padding: 25px; max-width: 800px; margin: 0 auto;
+        }
+        .step-card {
+            background: var(--kart-bg); padding: 20px; border-radius: 25px;
+            box-shadow: 0 8px 0 #dfe6e9; cursor: pointer; transition: 0.2s;
+            border: 2px solid #dfe6e9; display: flex; flex-direction: column; align-items: center;
+        }
+        .step-card:active { transform: translateY(6px); box-shadow: none; }
+        .step-card span { font-size: 40px; margin-bottom: 10px; }
+        .step-card b { font-size: 16px; color: var(--ana-renk); }
+
+        /* Oyun Sahnesi */
+        #game-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; z-index: 2000; flex-direction: column; align-items: center;
+        }
+        .close-btn { position: absolute; top: 20px; left: 20px; font-size: 25px; border: none; background: #eee; border-radius: 50%; width: 45px; height: 45px; cursor: pointer; }
+        
+        .display-area {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; width: 100%;
+        }
+        .big-char {
+            font-size: 180px; color: #2d3436; margin: 20px;
+            text-shadow: 4px 4px 0px #fab1a0; cursor: pointer;
+            animation: bounce 2s infinite;
+        }
+        .controls { padding-bottom: 50px; display: flex; gap: 20px; }
+        .nav-btn {
+            padding: 15px 35px; font-size: 20px; border-radius: 50px;
+            border: none; background: var(--ana-renk); color: white; cursor: pointer;
+            box-shadow: 0 5px 0 #4834d4;
+        }
+        
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+    </style>
+</head>
+<body>
+
+<div class="bg-pattern"></div>
+
+<div class="header">
+    <div class="avatar-box">
+        <span class="crown">👑</span>
+        <img src="kiz.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'" class="avatar">
     </div>
+    <h1>Maşallah Sana!</h1>
+    <p>Hangi kapıyı açalım prenses?</p>
+</div>
+
+<div class="map">
+    <div class="step-card" onclick="startLevel('harf')"><span>🎨</span><b>Harfler</b><small>Sayfa 5</small></div>
+    <div class="step-card" onclick="startLevel('hareke')"><span>🔔</span><b>Harekeler</b><small>Sayfa 11</small></div>
+    <div class="step-card" onclick="startLevel('cezm')"><span>🔗</span><b>Cezm</b><small>Sayfa 15</small></div>
+    <div class="step-card" onclick="startLevel('sedde')"><span>⚡</span><b>Şedde</b><small>Sayfa 16</small></div>
+    <div class="step-card" onclick="startLevel('med')"><span>📏</span><b>Uzatma</b><small>Sayfa 17</small></div>
+    <div class="step-card" onclick="startLevel('dua')"><span>🤲</span><b>Dualar</b><small>Sayfa 21</small></div>
+</div>
+
+<div id="game-overlay">
+    <button class="close-btn" onclick="closeGame()">🏠</button>
+    <div class="display-area">
+        <h2 id="level-title" style="color: var(--ana-renk);">Bölüm</h2>
+        <div id="char-display" class="big-char">ا</div>
+        <p id="char-name" style="font-size: 24px; font-weight: bold;"></p>
+    </div>
+    <div class="controls">
+        <button class="nav-btn" onclick="prev()">⬅</button>
+        <button class="nav-btn" onclick="playCurrent()">🔊 Dinle</button>
+        <button class="nav-btn" onclick="next()">➡</button>
+    </div>
+</div>
 
 <script>
-    // Harflerin internetteki hazır linkleri (Örnek set)
-    const harfler = [
-        {ad: 'Elif', simge: 'ا', ses: 'https://kuran.diyanet.gov.tr/sounds/elifba/1.mp3'},
-        {ad: 'Be', simge: 'ب', ses: 'https://kuran.diyanet.gov.tr/sounds/elifba/2.mp3'},
-        {ad: 'Te', simge: 'ت', ses: 'https://kuran.diyanet.gov.tr/sounds/elifba/3.mp3'}
-        // Burayı tüm alfabe için otomatik doldurabiliriz
-    ];
+    const DIK = "https://kuran.diyanet.gov.tr/sounds/elifba/";
+    const database = {
+        harf: [
+            {t: 'ا', s: DIK+'1.mp3', n: 'Elif'}, {t: 'ب', s: DIK+'2.mp3', n: 'Be'},
+            {t: 'ت', s: DIK+'3.mp3', n: 'Te'}, {t: 'ث', s: DIK+'4.mp3', n: 'Se'},
+            {t: 'ج', s: DIK+'5.mp3', n: 'Cim'}, {t: 'ح', s: DIK+'6.mp3', n: 'Ha'}
+            // ... Tüm harfler bu listeye eklenebilir
+        ],
+        hareke: [
+            {t: 'اَ', s: DIK+'11.mp3', n: 'Üstün (E)'},
+            {t: 'اِ', s: DIK+'11b.mp3', n: 'Esre (İ)'},
+            {t: 'اُ', s: DIK+'11c.mp3', n: 'Ötre (Ü)'}
+        ],
+        sedde: [
+            {t: 'اَبَّ', s: DIK+'16.mp3', n: 'Eb-be (Şedde)'},
+            {t: 'اِنَّ', s: DIK+'16b.mp3', n: 'İn-ne (Şedde)'}
+        ],
+        dua: [
+            {t: 'Sübhâneke', s: 'https://kuran.diyanet.gov.tr/sounds/dualar/subhaneke.mp3', n: 'Sübhâneke Duası'}
+        ]
+    };
 
-    function balonOlustur() {
-        const container = document.getElementById('game-container');
-        const harf = harfler[Math.floor(Math.random() * harfler.length)];
-        
-        const balon = document.createElement('div');
-        balon.className = 'balon';
-        balon.innerHTML = harf.simge;
-        balon.style.left = Math.random() * 80 + '%';
-        balon.style.position = 'absolute';
-        balon.style.fontSize = '50px';
-        balon.style.cursor = 'pointer';
-        balon.style.transition = 'top 4s linear';
-        balon.style.top = '400px';
+    let currentMod = 'harf';
+    let index = 0;
 
-        balon.onclick = () => {
-            new Audio(harf.ses).play(); // Diyanet sesini çalar
-            balon.style.display = 'none'; // Patlama efekti eklenebilir
-            alert("Harika! Bu bir " + harf.ad);
-        };
-
-        container.appendChild(balon);
-        setTimeout(() => { balon.style.top = '-100px'; }, 100);
+    function startLevel(m) {
+        currentMod = m; index = 0;
+        document.getElementById('game-overlay').style.display = 'flex';
+        updateUI();
     }
 
-    // Her 3 saniyede bir yeni harf uçsun
-    setInterval(balonOlustur, 3000);
+    function updateUI() {
+        const item = database[currentMod][index] || {t:'?', n:'Yakında!', s:''};
+        document.getElementById('char-display').innerText = item.t;
+        document.getElementById('char-name').innerText = item.n;
+        document.getElementById('level-title').innerText = item.n + " Öğreniyoruz";
+    }
+
+    function playCurrent() {
+        const item = database[currentMod][index];
+        if(item && item.s) {
+            let a = new Audio(item.s);
+            a.play();
+        }
+    }
+
+    function next() { index++; if(index >= database[currentMod].length) index = 0; updateUI(); }
+    function prev() { index--; if(index < 0) index = database[currentMod].length - 1; updateUI(); }
+    function closeGame() { document.getElementById('game-overlay').style.display = 'none'; }
 </script>
+
+</body>
+</html>
