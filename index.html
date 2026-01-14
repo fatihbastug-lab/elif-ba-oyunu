@@ -2,172 +2,154 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ayşe'nin Elif-Ba Dünyası 🌟</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayşe'nin Elif-Ba Dünyası</title>
     <style>
-        :root { --ana: #6c5ce7; --pembe: #ff78ac; --sari: #feca57; --yesil: #55efc4; --mavi: #74b9ff; }
-        body { margin: 0; font-family: 'Comic Sans MS', cursive; background: #dfe6e9; text-align: center; user-select: none; }
-        
-        /* Arka Plan Süslemeleri */
-        body::before { content: "☁️"; position: fixed; top: 10%; left: 5%; font-size: 50px; opacity: 0.5; }
-        body::after { content: "☀️"; position: fixed; top: 5%; right: 10%; font-size: 60px; opacity: 0.5; }
-
-        .header { background: white; padding: 15px; border-bottom: 8px solid var(--sari); border-radius: 0 0 50px 50px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; max-width: 500px; margin: 0 auto; }
-        
-        .btn { padding: 18px; border-radius: 25px; border: none; color: white; font-weight: bold; font-size: 16px; cursor: pointer; transition: 0.3s; box-shadow: 0 6px 0 rgba(0,0,0,0.2); position: relative; overflow: hidden; }
-        .btn:active { transform: translateY(4px); box-shadow: none; }
-
-        #stage { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: radial-gradient(circle, #fff 60%, #fab1a0); z-index: 100; flex-direction: column; align-items: center; justify-content: center; }
-        
-        .big-char { font-size: 180px; color: #2d3436; margin: 10px; cursor: pointer; text-shadow: 4px 4px 0px rgba(0,0,0,0.1); }
-        .word-hint { font-size: 30px; color: var(--ana); margin-bottom: 10px; background: white; padding: 5px 20px; border-radius: 30px; border: 3px solid var(--sari); }
-        
-        #paint-area { width: 320px; height: 320px; border: 8px solid var(--pembe); border-radius: 30px; background: white; position: relative; display: none; margin-bottom: 20px; }
-        canvas { border-radius: 22px; cursor: url('https://cdn-icons-png.flaticon.com/32/588/588395.png'), auto; touch-action: none; }
-
-        .controls { display: flex; gap: 20px; }
-        .circle { width: 80px; height: 80px; border-radius: 50%; border: none; background: var(--ana); color: white; font-size: 40px; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 6px 0 #4834d4; }
-        
-        #splash { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--ana); z-index: 1000; color: white; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .start-now { padding: 25px 50px; border-radius: 60px; border: none; background: var(--sari); font-size: 28px; font-weight: bold; cursor: pointer; box-shadow: 0 10px 0 #e1b12c; animation: bounce 2s infinite; }
-        @keyframes bounce { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        body { 
+            background-color: #FFF9C4; 
+            text-align: center; 
+            font-family: 'Comic Sans MS', sans-serif; 
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+        #giris-ekrani, #ders-alani {
+            width: 100%;
+            max-width: 400px;
+        }
+        .ana-buton { 
+            background-color: #FFD600; 
+            border: none; 
+            padding: 20px 40px; 
+            font-size: 28px; 
+            border-radius: 50px; 
+            cursor: pointer; 
+            box-shadow: 0 8px #F57F17;
+            color: #5D4037;
+            font-weight: bold;
+        }
+        .ana-buton:active { 
+            box-shadow: 0 2px #F57F17; 
+            transform: translateY(4px); 
+        }
+        #boyama-konteynir {
+            position: relative;
+            width: 300px;
+            height: 400px;
+            margin: 20px auto;
+            border: 8px solid #FFD600;
+            border-radius: 25px;
+            background-color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        #alt-harf {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            font-size: 280px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFD600;
+            user-select: none;
+        }
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            touch-action: none;
+            border-radius: 17px;
+        }
+        .aslan-img {
+            width: 100px;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+        h1 { color: #5D4037; margin-bottom: 30px; }
     </style>
 </head>
 <body>
 
-<div id="splash">
-    <div style="font-size: 100px; margin-bottom: 20px;">🍯</div>
-    <h1 style="font-size: 40px; margin-bottom: 30px;">Ayşe'nin Okulu</h1>
-    <button class="start-now" onclick="initGame()">OYUNU BAŞLAT ▶️</button>
-</div>
-
-<div class="header">
-    <img src="https://cdn-icons-png.flaticon.com/512/3940/3940403.png" style="width:100px; height:100px; border-radius:50%; border: 5px solid var(--pembe); background: #fff;">
-    <h2 style="color: var(--ana); margin: 10px 0; font-size: 28px;">Ayşe'nin Elif-Ba Bahçesi 🌸</h2>
-    <div style="color: var(--yesil); font-weight: bold;">⭐ Kazandığın Yıldızlar: <span id="yildiz-say">0</span></div>
-</div>
-
-<div class="grid">
-    <button class="btn" style="background:#ff7675;" onclick="basla('harf')">🎨 HARFLER</button>
-    <button class="btn" style="background:var(--pembe);" onclick="basla('boyama')">🖍️ BOYAMA</button>
-    <button class="btn" style="background:#fdcb6e;" onclick="basla('ustun')">☀️ ÜSTÜN (E)</button>
-    <button class="btn" style="background:#55efc4;" onclick="basla('esre')">💧 ESRE (İ)</button>
-    <button class="btn" style="background:#74b9ff;" onclick="basla('otre')">🌀 ÖTRE (Ü)</button>
-    <button class="btn" style="background:#a29bfe;" onclick="basla('cezim')">🛑 CEZİM</button>
-    <button class="btn" style="background:#e84393;" onclick="basla('sedde')">⚡ ŞEDDE</button>
-    <button class="btn" style="background:#2d3436;" onclick="basla('dua')">🤲 DUALAR</button>
-</div>
-
-<div id="stage">
-    <button onclick="home()" style="position:absolute; top:20px; right:20px; font-size:50px; border:none; background:none; cursor:pointer;">🏠</button>
-    
-    <div id="word-box" class="word-hint"></div>
-    
-    <div id="normal-view">
-        <div id="char-box" class="big-char" onclick="konus()"></div>
+    <div id="giris-ekrani">
+        <h1>Hoş Geldin Ayşe! 🌸</h1>
+        <button class="ana-buton" onclick="dersiBaslat()">🤲 Bismillah</button>
     </div>
 
-    <div id="paint-area">
-        <canvas id="paintCanvas" width="320" height="320"></canvas>
+    <div id="ders-alani" style="display: none;">
+        <img src="aslan.png" class="aslan-img" alt="Aslan" onclick="kukre()">
+        <div id="boyama-konteynir">
+            <div id="alt-harf">ا</div>
+            <canvas id="boyama-tuvali"></canvas>
+        </div>
+        <p style="color: #5D4037; font-weight: bold;">Elif Harfini Parmakla Çıkar! ☝️</p>
+        <button class="ana-buton" style="font-size: 18px; padding: 10px 20px;" onclick="sifirla()">Tekrar Dene 🎨</button>
     </div>
 
-    <div class="controls">
-        <button class="circle" onclick="yuru(-1)">⬅️</button>
-        <button class="circle" style="background:var(--sari)" onclick="konus()">🔊</button>
-        <button class="circle" onclick="yuru(1)">➡️</button>
-    </div>
-</div>
+    <script>
+        const canvas = document.getElementById('boyama-tuvali');
+        const ctx = canvas.getContext('2d');
+        let ciziyorMu = false;
 
-<script>
-    const HARFLER = ["ا","ب","ت","ث","ج","ح","خ","د","ذ","ر","ز","س","ش","ص","ض","ط","ظ","ع","غ","ف","ق","ك","ل","م","ن","و","ه","ي"];
-    const ISIMLER = ["Elif","Be","Te","Se","Cim","Ha","Hı","Dal","Zel","Ra","Ze","Sin","Şın","Sad","Dad","Tı","Zı","Ayın","Gayın","Fe","Kaf","Kef","Lam","Mim","Nun","Vav","He","Ye"];
-    const KELIMELER = ["🚗 Araba","🐟 Balık","🐊 Timsah","❄️ Kar","🐪 Deve","🕊️ Güvercin","🐑 Koyun","🦒 Zürafa","🌽 Mısır","🚀 Roket","🦓 Zebra","🐢 Kaplumbağa","☀️ Güneş","🎈 Balon","🐸 Kurbağa","✈️ Uçak","🦌 Geyik","🍇 Üzüm","☁️ Bulut","🐘 Fil","🥨 Simit","🐕 Köpek","🍋 Limon","🍌 Muz","🏠 Ev","🌷 Çiçek","🎁 Hediye","🛶 Kayık"];
-
-    let mod = '', i = 0, yildiz = 0;
-    let canvas, ctx, painting = false;
-
-    function initGame() {
-        document.getElementById('splash').style.display = 'none';
-        canvas = document.getElementById('paintCanvas');
-        ctx = canvas.getContext('2d');
-        // Ses kilidini aç
-        let unlock = new SpeechSynthesisUtterance("");
-        window.speechSynthesis.speak(unlock);
-        
-        canvas.addEventListener('mousedown', startPaint);
-        canvas.addEventListener('mousemove', draw);
-        canvas.addEventListener('mouseup', stopPaint);
-        canvas.addEventListener('touchstart', (e) => startPaint(e.touches[0]));
-        canvas.addEventListener('touchmove', (e) => draw(e.touches[0]));
-        canvas.addEventListener('touchend', stopPaint);
-    }
-
-    function basla(m) {
-        mod = m; i = 0;
-        document.getElementById('stage').style.display = 'flex';
-        guncelle();
-    }
-
-    function guncelle() {
-        let h = HARFLER[i], n = ISIMLER[i], k = KELIMELER[i];
-        document.getElementById('paint-area').style.display = (mod == 'boyama' ? 'block' : 'none');
-        document.getElementById('normal-view').style.display = (mod == 'boyama' ? 'none' : 'block');
-        
-        if(mod == 'boyama') {
-            ctx.clearRect(0,0,320,320);
-            ctx.font = "220px 'Comic Sans MS'";
-            ctx.textAlign = "center";
-            ctx.textBaseline = "middle";
-            ctx.strokeStyle = "#ddd";
-            ctx.lineWidth = 3;
-            ctx.strokeText(h, 160, 160);
+        function dersiBaslat() {
+            document.getElementById('giris-ekrani').style.display = 'none';
+            document.getElementById('ders-alani').style.display = 'block';
+            
+            canvas.width = 300;
+            canvas.height = 400;
+            sifirla();
         }
 
-        let sesMetni = h;
-        if(mod == 'ustun') sesMetni = h + "َ";
-        if(mod == 'esre') sesMetni = h + "ِ";
-        if(mod == 'otre') sesMetni = h + "ُ";
-        if(mod == 'cezim') sesMetni = "ا" + h + "ْ";
-        if(mod == 'sedde') sesMetni = "ا" + h + "َّ";
+        function sifirla() {
+            ctx.globalCompositeOperation = 'source-over';
+            ctx.fillStyle = '#D1D1D1'; // Gri kaplama
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = "#888";
+            ctx.font = "20px Arial";
+            ctx.textAlign = "center";
+            ctx.fillText("Burayı kazı!", canvas.width/2, canvas.height/2);
+
+            ctx.globalCompositeOperation = 'destination-out'; // Silme modu
+        }
+
+        function ciz(x, y) {
+            ctx.beginPath();
+            ctx.arc(x, y, 35, 0, Math.PI * 2);
+            ctx.fill();
+        }
+
+        // Fare ve Dokunmatik Olayları
+        const olayBaslat = () => ciziyorMu = true;
+        const olayBitir = () => ciziyorMu = false;
+
+        canvas.addEventListener('mousedown', olayBaslat);
+        window.addEventListener('mouseup', olayBitir);
         
-        document.getElementById('char-box').innerText = sesMetni;
-        document.getElementById('word-box').innerText = (mod == 'harf' || mod == 'boyama') ? k : n;
-        document.getElementById('char-box').dataset.oku = sesMetni;
-        konus();
-    }
+        canvas.addEventListener('mousemove', (e) => {
+            if (!ciziyorMu) return;
+            const rect = canvas.getBoundingClientRect();
+            ciz(e.clientX - rect.left, e.clientY - rect.top);
+        });
 
-    function startPaint(e) { painting = true; draw(e); }
-    function stopPaint() { painting = false; ctx.beginPath(); yildiz++; document.getElementById('yildiz-say').innerText = yildiz; }
-    function draw(e) {
-        if(!painting) return;
-        let rect = canvas.getBoundingClientRect();
-        let x = (e.clientX || e.pageX) - rect.left;
-        let y = (e.clientY || e.pageY) - rect.top;
-        ctx.lineWidth = 15;
-        ctx.lineCap = 'round';
-        ctx.strokeStyle = `hsl(${Math.random() * 360}, 100%, 50%)`;
-        ctx.lineTo(x, y);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.moveTo(x, y);
-    }
+        canvas.addEventListener('touchstart', (e) => {
+            ciziyorMu = true;
+            e.preventDefault();
+        });
+        
+        canvas.addEventListener('touchmove', (e) => {
+            if (!ciziyorMu) return;
+            const rect = canvas.getBoundingClientRect();
+            const touch = e.touches[0];
+            ciz(touch.clientX - rect.left, touch.clientY - rect.top);
+            e.preventDefault();
+        });
 
-    function konus() {
-        window.speechSynthesis.cancel();
-        let m = document.getElementById('char-box').dataset.oku;
-        let u = new SpeechSynthesisUtterance(m);
-        u.lang = 'ar-SA'; u.rate = 0.5; u.pitch = 1.3;
-        window.speechSynthesis.speak(u);
-    }
-
-    function yuru(yon) { i = (i + yon + 28) % 28; guncelle(); }
-    function home() { document.getElementById('stage').style.display = 'none'; }
-</script>
-</body><div id="boyama-konteynir" style="position: relative; width: 300px; height: 400px; margin: 0 auto;">
-    <div id="alt-harf" style="position: absolute; width: 100%; height: 100%; font-size: 200px; display: flex; align-items: center; justify-content: center; color: #FFD600;">ا</div>
-    
-    <canvas id="boyama-tuvali" width="300" height="400" style="position: absolute; top: 0; left: 0; cursor: crosshair;"></canvas>
-</div>
-
+        function kukre() {
+            alert("Aslan: Rrrr! Aferin Ayşe, bu bir ELİF! 🦁");
+        }
+    </script>
+</body>
 </html>
