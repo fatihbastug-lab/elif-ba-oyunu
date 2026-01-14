@@ -26,14 +26,16 @@
         }
         .ana-buton:active { transform: translateY(3px); box-shadow: 0 2px var(--buton-golge); }
         
-        /* Bilgi Panelleri */
         .mesaj-kutusu {
             background: white; border-radius: 20px; padding: 15px;
             margin: 10px auto; box-shadow: 0 4px 15px rgba(0,0,0,0.1);
             font-weight: bold;
         }
         
-        /* Harf Listesi */
+        #okunus-paneli {
+            font-size: 22px; color: #D84315; font-weight: bold; margin: 10px 0; min-height: 30px;
+        }
+
         .harf-izgara {
             display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
             margin: 20px 0;
@@ -42,9 +44,7 @@
             background: white; border: 3px solid #FFD600; padding: 10px;
             border-radius: 20px; cursor: pointer; transition: 0.2s;
         }
-        .harf-kart:hover { transform: scale(1.05); }
 
-        /* Harf Halleri Paneli */
         .haller-konteynir {
             display: flex; justify-content: space-around; 
             background: #FFFDE7; border-radius: 15px; padding: 10px; margin: 10px 0;
@@ -53,7 +53,6 @@
         .hal-kutu { font-size: 35px; color: #E64A19; }
         .hal-etiket { font-size: 12px; color: #795548; }
 
-        /* Boyama Alanı */
         #tuval-konteynir {
             position: relative; width: 280px; height: 320px; margin: 15px auto;
             border: 10px solid #FFD600; border-radius: 30px; background: white;
@@ -64,6 +63,12 @@
             display: flex; align-items: center; justify-content: center; color: #FFD600;
         }
         canvas { position: absolute; top: 0; left: 0; touch-action: none; }
+
+        .hareke-buton {
+            background: #4FC3F7; color: white; font-size: 35px;
+            width: 65px; height: 65px; border-radius: 15px; border: none;
+            box-shadow: 0 4px #0288D1; cursor: pointer; margin: 5px;
+        }
     </style>
 </head>
 <body>
@@ -71,7 +76,7 @@
     <div id="ana-ekran">
         <img src="kiz.png" style="width: 100px; border-radius: 50%; border: 4px solid white; margin-top: 10px;">
         <h2 style="color: #E64A19; margin: 5px;">Ayşe'nin Elif-Ba Dünyası 🌸</h2>
-        <div class="mesaj-kutusu">Hangi harfi öğrenelim Ayşe? 😊</div>
+        <div class="mesaj-kutusu">Öğrenmek istediğin harfe dokun Ayşe! 😊</div>
         <div class="harf-izgara" id="liste"></div>
     </div>
 
@@ -80,7 +85,7 @@
         
         <div class="mesaj-kutusu">
             <div id="ders-baslik" style="font-size: 22px; color: #E64A19;"></div>
-            <div id="ders-ipucu" style="font-size: 14px; margin-top: 5px;">Harfi parmağınla çıkar! ✨</div>
+            <div id="okunus-paneli">Harfi parmağınla çıkar! ✨</div>
             
             <div class="haller-konteynir">
                 <div><div class="hal-kutu" id="h-son"></div><div class="hal-etiket">Sonda</div></div>
@@ -95,47 +100,53 @@
         </div>
 
         <div class="mesaj-kutusu">
-            <p style="margin: 0 0 10px 0;">Harekeleri Dene:</p>
-            <button class="ana-buton" style="background:#4FC3F7;" onclick="harekeTak('َ', 'Üstün: (E/A) sesi verir. ☀️')">َ </button>
-            <button class="ana-buton" style="background:#4FC3F7;" onclick="harekeTak('ِ', 'Esre: (İ/I) sesi verir. 💧')">ِ </button>
-            <button class="ana-buton" style="background:#4FC3F7;" onclick="harekeTak('ُ', 'Ötre: Dudak büzerek (Ü/U). 😗')">ُ </button>
+            <p style="margin: 0 0 10px 0;">Harekeleri Seç:</p>
+            <button class="hareke-buton" onclick="harekeUygula('َ', 'Üstün')">ـَ</button>
+            <button class="hareke-buton" onclick="harekeUygula('ِ', 'Esre')">ـِ</button>
+            <button class="hareke-buton" onclick="harekeUygula('ُ', 'Ötre')">ـُ</button>
             <br>
-            <button class="ana-buton" style="background:#81C784;" onclick="harekeTak('ّ', 'Şedde: Harfi ÇİFT ve GÜÇLÜ okutur! 💪')">ّ </button>
-            <button class="ana-buton" style="background:#81C784;" onclick="harekeTak('ْ', 'Cezim: Harfi durdurur ve bağlar. 🛑')">ْ </button>
+            <button class="hareke-buton" style="background:#81C784; box-shadow: 0 4px #2E7D32;" onclick="harekeUygula('ّ', 'Şedde')">ـّ</button>
+            <button class="hareke-buton" style="background:#81C784; box-shadow: 0 4px #2E7D32;" onclick="harekeUygula('ْ', 'Cezim')">ـْ</button>
         </div>
     </div>
 
     <script>
         const alfabe = [
-            { h: "ا", ad: "Elif", oku: "E/A", ip: "İnce ve dik durur. 📏", b: "ا", o: "ـا", s: "ـا" },
-            { h: "ب", ad: "Be", oku: "B", ip: "Altında bir noktası var. 🍎", b: "بـ", o: "ـبـ", s: "ـب" },
-            { h: "ت", ad: "Te", oku: "T", ip: "Üstünde iki gözü var. 👀", b: "تـ", o: "ـتـ", s: "ـت" },
-            { h: "ث", ad: "Se", oku: "S (Peltek)", ip: "Dilini dişlerine değdir. 👅", b: "ثـ", o: "ـثـ", s: "ـث" },
-            { h: "ج", ad: "Cim", oku: "C", ip: "Karnında bir noktası var. 🤰", b: "جـ", o: "ـجـ", s: "ـج" },
-            { h: "ح", ad: "Ha", oku: "H", ip: "Boğazdan gelen ince ses. ✨", b: "حـ", o: "ـحـ", s: "ـح" },
-            { h: "خ", ad: "Ha", oku: "H (Hırıltılı)", ip: "Kalın ve hırıltılı bir ses. 🗣️", b: "خـ", o: "ـخـ", s: "ـخ" },
-            { h: "د", ad: "Dal", oku: "D", ip: "Küçük bir kanca gibi. 🪝", b: "د", o: "ـد", s: "ـd" },
-            { h: "ذ", ad: "Zel", oku: "Z (Peltek)", ip: "Dal'ın noktalı ve peltek hali. 👅", b: "ذ", o: "ـذ", s: "ـذ" },
-            { h: "ر", ad: "Ra", oku: "R", ip: "Kaydırak gibi kayar! 🛝", b: "ر", o: "ـر", s: "ـر" },
-            { h: "ز", ad: "Ze", oku: "Z", ip: "Ra'nın noktalı hali. 🐝", b: "ز", o: "ـz", s: "ـz" },
-            { h: "س", ad: "Sin", oku: "S", ip: "Üç tane dişi var. 😁", b: "سـ", o: "ـسـ", s: "ـس" },
-            { h: "ش", ad: "Şın", oku: "Ş", ip: "Sin'in üç noktalı hali. 🤫", b: "şـ", o: "ـşـ", s: "ـş" },
-            { h: "ص", ad: "Sad", oku: "S (Kalın)", ip: "Dolu dolu bir S sesi. 🔊", b: "صـ", o: "ـصـ", s: "ـص" },
-            { h: "ض", ad: "Dad", oku: "D (Kalın)", ip: "Dilin yanını dişlere değdir. 👅", b: "ضـ", o: "ـضـ", s: "ـض" },
-            { h: "ط", ad: "Ta", oku: "T (Kalın)", ip: "Dik ve güçlü bir T sesi. 💪", b: "طـ", o: "ـطـ", s: "ـط" },
-            { h: "ظ", ad: "Za", oku: "Z (Peltek/Kalın)", ip: "Ta'nın noktalı hali. 🗣️", b: "ظـ", o: "ـظـ", s: "ـظ" },
-            { h: "ع", ad: "Ayn", oku: "A (Boğazdan)", ip: "Boğazını hafifçe sık. 🍏", b: "عـ", o: "ـعـ", s: "ـع" },
-            { h: "غ", ad: "Ğayn", oku: "Ğ", ip: "Ayn'ın noktalı hali. 🌫️", b: "غـ", o: "ـغـ", s: "ـغ" },
-            { h: "ف", ad: "Fe", oku: "F", ip: "Üstünde bir noktası var. 🎈", b: "فـ", o: "ـفـ", s: "ـف" },
-            { h: "ق", ad: "Kaf", oku: "K (Kalın)", ip: "Boğazın arkasından gelir. 🔉", b: "قـ", o: "ـقـ", s: "ـق" },
-            { h: "ك", ad: "Kef", oku: "K", ip: "İnce ve zarif bir K sesi. ✨", b: "كـ", o: "ـكـ", s: "ـك" },
-            { h: "ل", ad: "Lam", oku: "L", ip: "Baston gibi görünür. 🦯", b: "لـ", o: "ـلـ", s: "ـل" },
-            { h: "م", ad: "Mim", oku: "M", ip: "Yuvarlak küçük bir başı var. 🍬", b: "مـ", o: "ـمـ", s: "ـم" },
-            { h: "ن", ad: "Nun", oku: "N", ip: "Kasenin içinde bir nokta. 🥣", b: "نـ", o: "ـنـ", s: "ـن" },
-            { h: "و", ad: "Vav", oku: "V", ip: "Dudaklarını büzmeyi unutma! 😗", b: "و", o: "ـو", s: "ـو" },
-            { h: "ه", ad: "He", oku: "H", ip: "Göğüsten gelen derin bir H. 💨", b: "هـ", o: "ـهـ", s: "ـه" },
-            { h: "ي", ad: "Ye", oku: "Y", ip: "Altında iki tane noktası var. 🦆", b: "يـ", o: "ـيـ", s: "ـي" }
+            { h: "ا", ad: "Elif", ses: "E", tip: "ince", b: "ا", o: "ـا", s: "ـا" },
+            { h: "ب", ad: "Be", ses: "B", tip: "ince", b: "بـ", o: "ـبـ", s: "ـب" },
+            { h: "ت", ad: "Te", ses: "T", tip: "ince", b: "تـ", o: "ـتـ", s: "ـت" },
+            { h: "ث", ad: "Se", ses: "S", tip: "ince", b: "ثـ", o: "ـثـ", s: "ـث" },
+            { h: "ج", ad: "Cim", ses: "C", tip: "ince", b: "جـ", o: "ـجـ", s: "ـج" },
+            { h: "ح", ad: "Ha", ses: "H", tip: "ince", b: "حـ", o: "ـحـ", s: "ـح" },
+            { h: "خ", ad: "Ha", ses: "H", tip: "kalın", b: "خـ", o: "ـخـ", s: "ـخ" },
+            { h: "د", ad: "Dal", ses: "D", tip: "ince", b: "د", o: "ـد", s: "ـد" },
+            { h: "ذ", ad: "Zel", ses: "Z", tip: "ince", b: "ذ", o: "ـذ", s: "ـذ" },
+            { h: "ر", ad: "Ra", ses: "R", tip: "kalın", b: "ر", o: "ـر", s: "ـر" },
+            { h: "ز", ad: "Ze", ses: "Z", tip: "ince", b: "ز", o: "ـz", s: "ـz" },
+            { h: "س", ad: "Sin", ses: "S", tip: "ince", b: "سـ", o: "ـسـ", s: "ـس" },
+            { h: "ش", ad: "Şın", ses: "Ş", tip: "ince", b: "şـ", o: "ـşـ", s: "ـş" },
+            { h: "ص", ad: "Sad", ses: "S", tip: "kalın", b: "صـ", o: "ـصـ", s: "ـص" },
+            { h: "ض", ad: "Dad", ses: "D", tip: "kalın", b: "ضـ", o: "ـضـ", s: "ـض" },
+            { h: "ط", ad: "Ta", ses: "T", tip: "kalın", b: "طـ", o: "ـطـ", s: "ـط" },
+            { h: "ظ", ad: "Za", ses: "Z", tip: "kalın", b: "ظـ", o: "ـظـ", s: "ـظ" },
+            { h: "ع", ad: "Ayn", ses: "A", tip: "kalın", b: "عـ", o: "ـعـ", s: "ـع" },
+            { h: "غ", ad: "Ğayn", ses: "Ğ", tip: "kalın", b: "غـ", o: "ـغـ", s: "ـغ" },
+            { h: "ف", ad: "Fe", ses: "F", tip: "ince", b: "فـ", o: "ـفـ", s: "ـف" },
+            { h: "ق", ad: "Kaf", ses: "K", tip: "kalın", b: "قـ", o: "ـقـ", s: "ـق" },
+            { h: "ك", ad: "Kef", ses: "K", tip: "ince", b: "كـ", o: "ـكـ", s: "ـك" },
+            { h: "ل", ad: "Lam", ses: "L", tip: "ince", b: "لـ", o: "ـلـ", s: "ـل" },
+            { h: "م", ad: "Mim", ses: "M", tip: "ince", b: "مـ", o: "ـمـ", s: "ـم" },
+            { h: "ن", ad: "Nun", ses: "N", tip: "ince", b: "نـ", o: "ـنـ", s: "ـن" },
+            { h: "و", ad: "Vav", ses: "V", tip: "ince", b: "و", o: "ـو", s: "ـو" },
+            { h: "ه", ad: "He", ses: "H", tip: "ince", b: "هـ", o: "ـهـ", s: "ـه" },
+            { h: "ي", ad: "Ye", ses: "Y", tip: "ince", b: "يـ", o: "ـيـ", s: "ـي" }
         ];
+
+        const sesler = {
+            "Üstün": { ince: "e", kalin: "a" },
+            "Esre":  { ince: "i", kalin: "ı" },
+            "Ötre":  { ince: "ü", kalin: "u" }
+        };
 
         const listeDiv = document.getElementById('liste');
         const tuval = document.getElementById('tuval');
@@ -143,35 +154,36 @@
         let seciliHarf = null;
         let boyuyorMu = false;
 
-        // Harfleri Menüye Ekle
-        alfabe.forEach(veri => {
-            const kart = document.createElement('div');
-            kart.className = 'harf-kart';
-            kart.innerHTML = `<div style="font-size:30px">${veri.h}</div><div style="font-size:12px">${veri.ad}</div>`;
-            kart.onclick = () => dersBaslat(veri);
-            listeDiv.appendChild(kart);
+        alfabe.forEach(v => {
+            const k = document.createElement('div');
+            k.className = 'harf-kart';
+            k.innerHTML = `<div style="font-size:30px">${v.h}</div><div style="font-size:12px">${v.ad}</div>`;
+            k.onclick = () => dersBaslat(v);
+            listeDiv.appendChild(k);
         });
 
-        function dersBaslat(veri) {
-            seciliHarf = veri;
+        function dersBaslat(v) {
+            seciliHarf = v;
             document.getElementById('ana-ekran').style.display = 'none';
             document.getElementById('ders-ekrani').style.display = 'block';
-            
-            document.getElementById('ders-baslik').innerText = `${veri.h} - ${veri.ad}`;
-            document.getElementById('ders-ipucu').innerText = veri.ip;
-            document.getElementById('alt-harf').innerText = veri.h;
-            
-            document.getElementById('h-bas').innerText = veri.b;
-            document.getElementById('h-orta').innerText = veri.o;
-            document.getElementById('h-son').innerText = veri.s;
-
+            document.getElementById('ders-baslik').innerText = `${v.h} - ${v.ad}`;
+            document.getElementById('okunus-paneli').innerText = "Harfi parmağınla çıkar! ✨";
+            document.getElementById('alt-harf').innerText = v.h;
+            document.getElementById('h-bas').innerText = v.b;
+            document.getElementById('h-orta').innerText = v.o;
+            document.getElementById('h-son').innerText = v.s;
             tuval.width = 280; tuval.height = 320;
             sifirla();
         }
 
-        function harekeTak(sembol, aciklama) {
-            document.getElementById('alt-harf').innerText = seciliHarf.h + sembol;
-            document.getElementById('ders-ipucu').innerText = aciklama;
+        function harekeUygula(s, tip) {
+            document.getElementById('alt-harf').innerText = seciliHarf.h + s;
+            if (sesler[tip]) {
+                let v = (seciliHarf.tip === "kalın") ? sesler[tip].kalin : sesler[tip].ince;
+                document.getElementById('okunus-paneli').innerText = `${seciliHarf.ad} + ${tip} = ${seciliHarf.ses}${v}`;
+            } else {
+                document.getElementById('okunus-paneli').innerText = `${seciliHarf.ad} + ${tip} uygulandı!`;
+            }
             sifirla();
         }
 
@@ -187,13 +199,14 @@
             document.getElementById('ders-ekrani').style.display = 'none';
         }
 
-        // Kazıma/Boyama İşlemi
         const boya = (x, y) => { ctx.beginPath(); ctx.arc(x, y, 25, 0, Math.PI * 2); ctx.fill(); }
         tuval.addEventListener('mousedown', () => boyuyorMu = true);
         window.addEventListener('mouseup', () => boyuyorMu = false);
         tuval.addEventListener('mousemove', (e) => {
             if (boyuyorMu) { const r = tuval.getBoundingClientRect(); boya(e.clientX - r.left, e.clientY - r.top); }
         });
+        tuval.addEventListener('touchstart', (e) => { boyuyorMu = true; e.preventDefault(); }, {passive: false});
+        tuval.addEventListener('touchend', () => boyuyorMu = false);
         tuval.addEventListener('touchmove', (e) => {
             const r = tuval.getBoundingClientRect(); const t = e.touches[0];
             boya(t.clientX - r.left, t.clientY - r.top); e.preventDefault();
