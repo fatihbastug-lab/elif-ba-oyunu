@@ -4,134 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Ayşe'nin Elif-Ba Dünyası</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --ana: #6c5ce7; --pembe: #fd79a8; --sari: #feca57; --mavi: #00cec9; }
-        body { 
-            margin: 0; padding: 0; font-family: 'Comic Sans MS', cursive; 
-            background: #81ecec; overflow-x: hidden; text-align: center;
-        }
+        :root { --ana: #6c5ce7; --pembe: #ff78ac; --sari: #feca57; --mavi: #48dbfb; }
+        body { margin: 0; padding: 0; font-family: 'Comic Sans MS', cursive; background: #a29bfe; overflow-x: hidden; text-align: center; user-select: none; }
+        
+        /* Hareketli Arka Plan */
+        .cloud { position: fixed; background: white; border-radius: 50px; opacity: 0.3; z-index: -1; animation: move 15s infinite linear; }
+        @keyframes move { from { left: -100px; } to { left: 100%; } }
 
-        /* Hareketli Gökyüzü Arka Planı */
-        .sky {
-            position: fixed; top: 0; width: 100%; height: 100%;
-            background: linear-gradient(#81ecec, #fab1a0); z-index: -1;
-        }
+        /* Üst Panel */
+        .header { background: white; padding: 30px 10px; border-bottom: 8px solid var(--sari); border-radius: 0 0 60px 60px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
+        .ayse-img { width: 140px; height: 140px; border: 6px solid var(--pembe); border-radius: 50%; object-fit: cover; animation: bounce 2s infinite; background: #eee; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
 
-        /* Profil Alanı */
-        .top-bar {
-            background: white; padding: 25px; border-bottom-left-radius: 60px;
-            border-bottom-right-radius: 60px; box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-        }
-        .ayse-avatar {
-            width: 140px; height: 140px; border: 6px solid var(--pembe);
-            border-radius: 50%; object-fit: cover; animation: zıpla 2s infinite;
-        }
-        @keyframes zıpla { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        /* Oyun Menüsü */
-        .menu { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 20px; max-width: 500px; margin: 0 auto; }
-        .bolum {
-            padding: 20px; border-radius: 30px; border: none; color: white;
-            font-size: 18px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 8px 0 rgba(0,0,0,0.1); transition: 0.1s;
-        }
-        .bolum:active { transform: translateY(5px); box-shadow: none; }
+        /* Menü Kartları */
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 25px; max-width: 500px; margin: 0 auto; }
+        .card { padding: 20px; border-radius: 25px; border: none; color: white; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 6px 0 rgba(0,0,0,0.2); transition: 0.1s; }
+        .card:active { transform: translateY(6px); box-shadow: none; }
 
         /* Oyun Sahnesi */
-        #sahne {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: white; z-index: 100; flex-direction: column; align-items: center;
-        }
-        .buyuk-harf { font-size: 180px; margin-top: 80px; color: #2d3436; cursor: pointer; text-shadow: 5px 5px #eee; }
-        .bilgi { font-size: 28px; color: var(--ana); margin: 20px; }
-
-        /* Navigasyon */
-        .nav-bolumu { position: absolute; bottom: 40px; display: flex; gap: 20px; }
-        .yuvarlak-tus {
-            width: 80px; height: 80px; border-radius: 50%; border: none;
-            background: var(--ana); color: white; font-size: 35px; cursor: pointer;
-        }
+        #game { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 100; flex-direction: column; align-items: center; justify-content: center; }
+        .char { font-size: 160px; color: #2d3436; margin: 10px; cursor: pointer; text-shadow: 3px 3px #eee; }
+        .btn-row { display: flex; gap: 20px; margin-top: 50px; }
+        .btn { width: 70px; height: 70px; border-radius: 50%; border: none; background: var(--ana); color: white; font-size: 30px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="sky"></div>
+<div class="cloud" style="top:10%; width:100px; height:40px;"></div>
+<div class="cloud" style="top:20%; width:150px; height:50px; animation-delay: 5s;"></div>
 
-<div class="top-bar">
-    <img src="kiz.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'" class="ayse-avatar">
-    <h1 style="color: var(--ana);">Hoş Geldin Prenses Ayşe!</h1>
+<div class="header">
+    <img src="kiz.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'" class="ayse-img">
+    <h1 style="color: var(--ana); margin: 10px 0;">Selam Prenses Ayşe!</h1>
+    <p style="color: #666;">Bugün hangi adaya gidelim?</p>
 </div>
 
-<div class="menu">
-    <button class="bolum" style="background: #ff7675;" onclick="ac('harfler')">🍎<br>Harfler</button>
-    <button class="bolum" style="background: #fdcb6e;" onclick="ac('harekeler')">🌈<br>Harekeler</button>
-    <button class="bolum" style="background: #00b894;" onclick="ac('cezm')">🔗<br>Cezm</button>
-    <button class="bolum" style="background: #0984e3;" onclick="ac('sedde')">⚡<br>Şedde</button>
-    <button class="bolum" style="background: #6c5ce7;" onclick="ac('med')">📏<br>Uzatma</button>
-    <button class="bolum" style="background: #d63031;" onclick="ac('dualar')">🤲<br>Dualar</button>
+<div class="grid">
+    <button class="card" style="background:#ff7675;" onclick="go('harf')">🍎 Harfler</button>
+    <button class="card" style="background:#fdcb6e;" onclick="go('hareke')">🌈 Harekeler</button>
+    <button class="card" style="background:#00b894;" onclick="go('cezm')">🔗 Cezm</button>
+    <button class="card" style="background:#0984e3;" onclick="go('sedde')">⚡ Şedde</button>
+    <button class="card" style="background:#6c5ce7;" onclick="go('med')">📏 Uzatma</button>
+    <button class="card" style="background:#d63031;" onclick="go('dua')">🤲 Dualar</button>
 </div>
 
-<div id="sahne">
-    <button onclick="kapat()" style="position:absolute; top:20px; right:20px; font-size:40px; border:none; background:none;">🏠</button>
-    <div id="harf-alani" class="buyuk-harf" onclick="sesCal()"></div>
-    <div id="isim-alani" class="bilgi"></div>
-    
-    <div class="nav-bolumu">
-        <button class="yuvarlak-tus" onclick="degistir(-1)">⬅</button>
-        <button class="yuvarlak-tus" style="background:var(--pembe)" onclick="sesCal()">🔊</button>
-        <button class="yuvarlak-tus" onclick="degistir(1)">➡</button>
+<div id="game">
+    <button onclick="home()" style="position:absolute; top:20px; right:20px; font-size:40px; border:none; background:none;">🏠</button>
+    <div id="big-char" class="char" onclick="speak()"></div>
+    <h2 id="char-name" style="color: var(--ana);"></h2>
+    <div class="btn-row">
+        <button class="btn" onclick="nav(-1)">⬅</button>
+        <button class="btn" style="background:var(--pembe)" onclick="speak()">🔊</button>
+        <button class="btn" onclick="nav(1)">➡</button>
     </div>
 </div>
 
 <script>
-    const SES_YOLU = "https://kuran.diyanet.gov.tr/sounds/elifba/";
-    const veri = {
-        harfler: [
-            {t:'ا', n:'Elif', s:SES_YOLU+'1.mp3'}, {t:'ب', n:'Be', s:SES_YOLU+'2.mp3'}, 
-            {t:'ت', n:'Te', s:SES_YOLU+'3.mp3'}, {t:'ث', n:'Se', s:SES_YOLU+'4.mp3'},
-            {t:'ج', n:'Cim', s:SES_YOLU+'5.mp3'}, {t:'ح', n:'Ha', s:SES_YOLU+'6.mp3'}
-        ],
-        harekeler: [
-            {t:'اَ', n:'Üstün (E-A)', s:SES_YOLU+'11.mp3'}, 
-            {t:'اِ', n:'Esre (İ-I)', s:SES_YOLU+'11b.mp3'}, 
-            {t:'اُ', n:'Ötre (Ü-U)', s:SES_YOLU+'11c.mp3'}
-        ],
-        cezm: [{t:'اَبْ', n:'Cezm (Eb)', s:SES_YOLU+'15.mp3'}],
-        sedde: [{t:'اَبَّ', n:'Şedde (Eb-be)', s:SES_YOLU+'16.mp3'}],
-        med: [{t:'بَا', n:'Asar (Bâ)', s:SES_YOLU+'17.mp3'}],
-        dualar: [{t:'🤲', n:'Sübhâneke', s:'https://kuran.diyanet.gov.tr/sounds/dualar/subhaneke.mp3'}]
+    const URL = "https://kuran.diyanet.gov.tr/sounds/elifba/";
+    const DATA = {
+        harf: [{t:'ا', n:'Elif', s:'1.mp3'}, {t:'ب', n:'Be', s:'2.mp3'}, {t:'ت', n:'Te', s:'3.mp3'}, {t:'ث', n:'Se', s:'4.mp3'}],
+        hareke: [{t:'اَ', n:'Üstün', s:'11.mp3'}, {t:'اِ', n:'Esre', s:'11b.mp3'}, {t:'اُ', n:'Ötre', s:'11c.mp3'}],
+        cezm: [{t:'اَبْ', n:'Cezm', s:'15.mp3'}],
+        sedde: [{t:'اَبَّ', n:'Şedde', s:'16.mp3'}],
+        med: [{t:'بَا', n:'Asar', s:'17.mp3'}],
+        dua: [{t:'🤲', n:'Sübhâneke', s:'https://kuran.diyanet.gov.tr/sounds/dualar/subhaneke.mp3', full: true}]
     };
 
-    let aktifMod = 'harfler';
-    let sira = 0;
+    let cur = 'harf', i = 0;
 
-    function ac(mod) {
-        aktifMod = mod; sira = 0;
-        document.getElementById('sahne').style.display = 'flex';
-        goster();
+    function go(m) { 
+        cur = m; i = 0; 
+        document.getElementById('game').style.display = 'flex'; 
+        show(); 
     }
 
-    function goster() {
-        const h = veri[aktifMod][sira];
-        document.getElementById('harf-alani').innerText = h.t;
-        document.getElementById('isim-alani').innerText = h.n;
-        sesCal();
+    function show() {
+        const item = DATA[cur][i];
+        document.getElementById('big-char').innerText = item.t;
+        document.getElementById('char-name').innerText = item.n;
+        speak();
+        if(i === DATA[cur].length - 1) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     }
 
-    function sesCal() {
-        const s = veri[aktifMod][sira].s;
-        if(s) new Audio(s).play();
+    function speak() {
+        let s = DATA[cur][i].s;
+        let src = s.startsWith('http') ? s : URL + s;
+        new Audio(src).play();
     }
 
-    function degistir(yon) {
-        sira += yon;
-        if(sira >= veri[aktifMod].length) sira = 0;
-        if(sira < 0) sira = veri[aktifMod].length - 1;
-        goster();
+    function nav(d) {
+        i += d;
+        if(i >= DATA[cur].length) i = 0;
+        if(i < 0) i = DATA[cur].length - 1;
+        show();
     }
 
-    function kapat() { document.getElementById('sahne').style.display = 'none'; }
+    function home() { document.getElementById('game').style.display = 'none'; }
 </script>
-
 </body>
 </html>
