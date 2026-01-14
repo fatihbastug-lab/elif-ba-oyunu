@@ -16,7 +16,7 @@
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .kart { background: white; border-radius: 30px; padding: 15px; border: 5px solid var(--sari); margin: 15px 0; box-shadow: 0 8px 16px rgba(0,0,0,0.1); }
-        .birlesik-alan { font-size: 70px; direction: rtl; min-height: 140px; display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 20px; border: 2px dashed #DDD; margin-bottom: 10px; }
+        .birlesik-alan { font-size: 60px; direction: rtl; min-height: 140px; display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 20px; border: 2px dashed #DDD; margin-bottom: 10px; }
         
         .ana-buton { 
             background: var(--ana); color: white; border: none; padding: 15px 25px;
@@ -33,12 +33,12 @@
         .hareke-btn { 
             width: 55px; height: 55px; font-size: 24px; border-radius: 12px;
             border: none; background: var(--yesil); color: white; cursor: pointer; margin: 4px;
-            box-shadow: 0 4px #2E7D32;
+            box-shadow: 0 4px #2E7D32; display: inline-flex; align-items: center; justify-content: center;
         }
         
-        .harf-kart-sekil { display: flex; justify-content: space-around; font-size: 40px; direction: rtl; margin: 15px 0; }
-        .sekil-kutu { background: #F9F9F9; padding: 10px; border-radius: 15px; width: 90px; border: 1px solid #EEE; }
-        .sekil-kutu small { font-size: 12px; color: #888; display: block; margin-bottom: 5px; }
+        .harf-kart-sekil { display: flex; justify-content: space-around; font-size: 35px; direction: rtl; margin: 15px 0; }
+        .sekil-kutu { background: #F9F9F9; padding: 10px; border-radius: 15px; width: 85px; border: 1px solid #EEE; }
+        .sekil-kutu small { font-size: 11px; color: #888; display: block; margin-bottom: 5px; }
 
         .balon { position: absolute; bottom: -100px; width: 50px; height: 70px; border-radius: 50%; animation: uc 4s linear forwards; }
         @keyframes uc { to { transform: translateY(-120vh); } }
@@ -74,16 +74,16 @@
         <button class="ana-buton" style="background:#90A4AE; box-shadow:0 5px #546E7A;" onclick="git('menu')">🏠 Geri</button>
         <div class="kart">
             <div id="lego-sonuc" class="birlesik-alan">?</div>
-            <div id="lego-oku" style="font-size: 22px; font-weight: bold; color: var(--ana);">Harekeli Harf Yap!</div>
+            <div id="lego-oku" style="font-size: 20px; font-weight: bold; color: var(--ana);">Hareke ve Harf Seç!</div>
         </div>
 
         <div style="background: white; padding: 10px; border-radius: 20px; margin-bottom: 15px; border: 2px solid var(--yesil);">
-            <button class="hareke-btn" onclick="hSet('َ','e/a')">◌َ</button>
-            <button class="hareke-btn" onclick="hSet('ِ','i/ı')">◌ِ</button>
-            <button class="hareke-btn" onclick="hSet('ُ','ü/u')">◌ُ</button>
-            <button class="hareke-btn" onclick="hSet('ْ','')">◌ْ</button>
-            <button class="hareke-btn" onclick="hSet('ّ','-')">◌ّ</button>
-            <button class="hareke-btn" style="background:#FFAB40;" onclick="hSet('َا','â')">◌َا</button>
+            <button class="hareke-btn" title="Üstün" onclick="hSet('\u064E','e/a')">&#x064E;</button>
+            <button class="hareke-btn" title="Esre" onclick="hSet('\u0650','i/ı')">&#x0650;</button>
+            <button class="hareke-btn" title="Ötre" onclick="hSet('\u064F','ü/u')">&#x064F;</button>
+            <button class="hareke-btn" title="Cezim" onclick="hSet('\u0652','')">&#x0652;</button>
+            <button class="hareke-btn" title="Şedde" onclick="hSet('\u0651','-')">&#x0651;</button>
+            <button class="hareke-btn" style="background:#FFAB40;" title="Uzatma" onclick="hSet('\u064E\u0627','â')">&#x064E;&#x0627;</button>
             <button class="hareke-btn" style="background:var(--ana);" onclick="temizle()">🧹</button>
         </div>
 
@@ -92,35 +92,35 @@
 
     <script>
         const alfabe = [
-            {ad:"Elif", y:"ا", b:"ا", o:"ـا", s:"ـا", ses:"E", i:"Dimdik bir kalem!"},
-            {ad:"Be", y:"ب", b:"بـ", o:"ـبـ", s:"ـب", ses:"B", i:"Noktası altında tabak!"},
-            {ad:"Te", y:"ت", b:"تـ", o:"ـتـ", s:"ـت", ses:"T", i:"İki gözlü gülen yüz!"},
-            {ad:"Se", y:"ث", b:"ثـ", o:"ـثـ", s:"ـث", ses:"S", i:"Üç tane kar tanesi!"},
-            {ad:"Cim", y:"ج", b:"جـ", o:"ـجـ", s:"ـج", ses:"C", i:"Karnında şekeri var!"},
-            {ad:"Ha", y:"ح", b:"حـ", o:"ـحـ", s:"ـح", ses:"H", i:"Tertemiz, noktası yok!"},
-            {ad:"Hı", y:"خ", b:"خـ", o:"ـخـ", s:"ـخ", ses:"H", i:"Tepesinde noktası var!"},
-            {ad:"Dal", y:"د", b:"د", o:"ـد", s:"ـد", ses:"D", i:"Uçan kuşun kanadı!"},
-            {ad:"Zel", y:"ذ", b:"ذ", o:"ـذ", s:"ـذ", ses:"Z", i:"Noktalı peltek Dal!"},
-            {ad:"Ra", y:"ر", b:"ر", o:"ـر", s:"ـر", ses:"R", i:"Hızlı bir kaydırak!"},
-            {ad:"Ze", y:"ز", b:"ز", o:"ـز", s:"ـز", ses:"Z", i:"Noktalı keskin Ze!"},
-            {ad:"Sin", y:"س", b:"سـ", o:"ـسـ", s:"ـس", ses:"S", i:"Üç tane küçük dişi var!"},
-            {ad:"Şin", y:"ش", b:"şـ", o:"ـşـ", s:"ـş", ses:"Ş", i:"Üç noktalı Şin!"},
-            {ad:"Sad", y:"ص", b:"صـ", o:"ـصـ", s:"ـص", ses:"S", i:"Balon gibi şişkin!"},
-            {ad:"Dad", y:"ض", b:"ضـ", o:"ـضـ", s:"ـض", ses:"D", i:"Noktalı Sad!"},
-            {ad:"Tı", y:"ط", b:"طـ", o:"ـطـ", s:"ـط", ses:"T", i:"Dik duran çubuğu var!"},
-            {ad:"Zı", y:"ظ", b:"ظـ", o:"ـظـ", s:"ـظ", ses:"Z", i:"Noktalı Tı!"},
-            {ad:"Ayn", y:"ع", b:"عـ", o:"ـعـ", s:"ـع", ses:"A", i:"Ağzı açık bir kuş!"},
-            {ad:"Gayn", y:"غ", b:"غـ", o:"ـغـ", s:"ـغ", ses:"Ğ", i:"Noktalı Ayn!"},
-            {ad:"Fe", y:"ف", b:"فـ", o:"ـفـ", s:"ـف", ses:"F", i:"Bir tane gözü var!"},
-            {ad:"Kaf", y:"ق", b:"قـ", o:"ـقـ", s:"ـق", ses:"K", i:"İki tane gözü var!"},
-            {ad:"Kef", y:"ك", b:"كـ", o:"ـكـ", s:"ـك", ses:"K", i:"İçinde küçük s var!"},
-            {ad:"Lam", y:"ل", b:"لـ", o:"ـلـ", s:"ـل", ses:"L", i:"Baston gibi!"},
-            {ad:"Mim", y:"م", b:"مـ", o:"ـمـ", s:"ـم", ses:"M", i:"Küçük yuvarlak kafa!"},
-            {ad:"Nun", y:"ن", b:"نـ", o:"ـنـ", s:"ـن", ses:"N", i:"Ortasında noktası var!"},
-            {ad:"Vav", y:"و", b:"و", o:"ـو", s:"ـو", ses:"V", i:"Dönerek giden kuyruk!"},
-            {ad:"He", y:"ه", b:"هـ", o:"ـهـ", s:"ـه", ses:"H", i:"İki gözlü gözlük!"},
-            {ad:"Ye", y:"ي", b:"يـ", o:"ـيـ", s:"ـي", ses:"Y", i:"Altında iki noktası var!"},
-            {ad:"Lamelif", y:"لا", b:"لا", o:"ـلا", s:"ـلا", ses:"Lâ", i:"İki harf el ele!"}
+            {ad:"Elif", y:"\u0627", b:"\u0627", o:"\u0640\u0627", s:"\u0640\u0627", ses:"E", i:"Dimdik bir kalem!"},
+            {ad:"Be", y:"\u0628", b:"\u0628\u0640", o:"\u0640\u0628\u0640", s:"\u0640\u0628", ses:"B", i:"Noktası altında tabak!"},
+            {ad:"Te", y:"\u062A", b:"\u062A\u0640", o:"\u0640\u062A\u0640", s:"\u0640\u062A", ses:"T", i:"İki gözlü gülen yüz!"},
+            {ad:"Se", y:"\u062B", b:"\u062B\u0640", o:"\u0640\u062B\u0640", s:"\u0640\u062B", ses:"S", i:"Üç tane kar tanesi!"},
+            {ad:"Cim", y:"\u062C", b:"\u062C\u0640", o:"\u0640\u062C\u0640", s:"\u0640\u062C", ses:"C", i:"Karnında şekeri var!"},
+            {ad:"Ha", y:"\u062D", b:"\u062D\u0640", o:"\u0640\u062D\u0640", s:"\u0640\u062D", ses:"H", i:"Tertemiz, noktası yok!"},
+            {ad:"Hı", y:"\u062E", b:"\u062E\u0640", o:"\u0640\u062E\u0640", s:"\u0640\u062E", ses:"H", i:"Tepesinde noktası var!"},
+            {ad:"Dal", y:"\u062F", b:"\u062F", o:"\u0640\u062F", s:"\u0640\u062F", ses:"D", i:"Uçan kuşun kanadı!"},
+            {ad:"Zel", y:"\u0630", b:"\u0630", o:"\u0640\u0630", s:"\u0640\u0630", ses:"Z", i:"Noktalı peltek Dal!"},
+            {ad:"Ra", y:"\u0631", b:"\u0631", o:"\u0640\u0631", s:"\u0640\u0631", ses:"R", i:"Hızlı bir kaydırak!"},
+            {ad:"Ze", y:"\u0632", b:"\u0632", o:"\u0640\u0632", s:"\u0640\u0632", ses:"Z", i:"Noktalı keskin Ze!"},
+            {ad:"Sin", y:"\u0633", b:"\u0633\u0640", o:"\u0640\u0633\u0640", s:"\u0640\u0633", ses:"S", i:"Üç tane küçük dişi var!"},
+            {ad:"Şin", y:"\u0634", b:"\u0634\u0640", o:"\u0640\u0634\u0640", s:"\u0640\u0634", ses:"Ş", i:"Üç noktalı Şin!"},
+            {ad:"Sad", y:"\u0635", b:"\u0635\u0640", o:"\u0640\u0635\u0640", s:"\u0640\u0635", ses:"S", i:"Balon gibi şişkin!"},
+            {ad:"Dad", y:"\u0636", b:"\u0636\u0640", o:"\u0640\u0636\u0640", s:"\u0640\u0636", ses:"D", i:"Noktalı Sad!"},
+            {ad:"Tı", y:"\u0637", b:"\u0637\u0640", o:"\u0640\u0637\u0640", s:"\u0640\u0637", ses:"T", i:"Dik duran çubuğu var!"},
+            {ad:"Zı", y:"\u0638", b:"\u0638\u0640", o:"\u0640\u0638\u0640", s:"\u0640\u0638", ses:"Z", i:"Noktalı Tı!"},
+            {ad:"Ayn", y:"\u0639", b:"\u0639\u0640", o:"\u0640\u0639\u0640", s:"\u0640\u0639", ses:"A", i:"Ağzı açık bir kuş!"},
+            {ad:"Gayn", y:"\u063A", b:"\u063A\u0640", o:"\u0640\u063A\u0640", s:"\u0640\u063A", ses:"Ğ", i:"Noktalı Ayn!"},
+            {ad:"Fe", y:"\u0641", b:"\u0641\u0640", o:"\u0640\u0641\u0640", s:"\u0640\u0641", ses:"F", i:"Bir tane gözü var!"},
+            {ad:"Kaf", y:"\u0642", b:"\u0642\u0640", o:"\u0640\u0642\u0640", s:"\u0640\u0642", ses:"K", i:"İki tane gözü var!"},
+            {ad:"Kef", y:"\u0643", b:"\u0643\u0640", o:"\u0640\u0643\u0640", s:"\u0640\u0643", ses:"K", i:"İçinde küçük s var!"},
+            {ad:"Lam", y:"\u0644", b:"\u0644\u0640", o:"\u0640\u0644\u0640", s:"\u0640\u0644", ses:"L", i:"Baston gibi!"},
+            {ad:"Mim", y:"\u0645", b:"\u0645\u0640", o:"\u0640\u0645\u0640", s:"\u0640\u0645", ses:"M", i:"Küçük yuvarlak kafa!"},
+            {ad:"Nun", y:"\u0646", b:"\u0646\u0640", o:"\u0640\u0646\u0640", s:"\u0640\u0646", ses:"N", i:"Ortasında noktası var!"},
+            {ad:"Vav", y:"\u0648", b:"\u0648", o:"\u0640\u0648", s:"\u0640\u0648", ses:"V", i:"Dönerek giden kuyruk!"},
+            {ad:"He", y:"\u0647", b:"\u0647\u0640", o:"\u0640\u0647\u0640", s:"\u0640\u0647", ses:"H", i:"İki gözlü gözlük!"},
+            {ad:"Ye", y:"\u064A", b:"\u064A\u0640", o:"\u0640\u064A\u0640", s:"\u0640\u064A", ses:"Y", i:"Altında iki noktası var!"},
+            {ad:"Lamelif", y:"\u0644\u0627", b:"\u0644\u0627", o:"\u0640\u0644\u0627", s:"\u0640\u0644\u0627", ses:"Lâ", i:"İki harf el ele!"}
         ];
 
         let sH = ""; let sS = ""; let kD = [];
@@ -168,13 +168,13 @@
                     else shp = it.o;
                 }
                 resH += shp + it.h; 
-                resS += it.ses + (it.h === "ّ" ? it.ses : "") + it.s;
+                resS += it.ses + (it.h === "\u0651" ? it.ses : "") + it.s;
             });
             document.getElementById('lego-sonuc').innerText = resH;
             document.getElementById('lego-oku').innerText = "Oku: " + resS.toLowerCase();
         }
 
-        function temizle() { kD = []; sH = ""; sS = ""; document.getElementById('lego-sonuc').innerText = "?"; document.getElementById('lego-oku').innerText = "Harekeli Harf Yap!"; }
+        function temizle() { kD = []; sH = ""; sS = ""; document.getElementById('lego-sonuc').innerText = "?"; document.getElementById('lego-oku').innerText = "Hareke ve Harf Seç!"; }
 
         function balonUcur() {
             for(let i=0; i<10; i++) {
