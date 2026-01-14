@@ -3,56 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ayşe Elif-Ba Dünyası</title>
+    <title>Ayşe Elif-Ba Mektebi</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root { --ana: #6c5ce7; --pembe: #ff78ac; --sari: #feca57; }
         body { margin: 0; padding: 0; font-family: 'Comic Sans MS', cursive; background: #a29bfe; text-align: center; }
-        
-        .header { background: white; padding: 25px; border-bottom: 8px solid var(--sari); border-radius: 0 0 60px 60px; }
-        .ayse-img { width: 130px; height: 130px; border: 6px solid var(--pembe); border-radius: 50%; object-fit: cover; background: #eee; }
-        
-        .menu { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; max-width: 500px; margin: 0 auto; }
-        .ada-btn { padding: 20px; border-radius: 25px; border: none; color: white; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 6px 0 rgba(0,0,0,0.1); }
-        .ada-btn:active { transform: translateY(4px); box-shadow: none; }
-
+        .header { background: white; padding: 20px; border-bottom: 8px solid var(--sari); border-radius: 0 0 50px 50px; }
+        .ayse-img { width: 120px; height: 120px; border: 5px solid var(--pembe); border-radius: 50%; object-fit: cover; background: #fff; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 20px; max-width: 400px; margin: 0 auto; }
+        .ada-btn { padding: 20px; border-radius: 20px; border: none; color: white; font-weight: bold; cursor: pointer; box-shadow: 0 5px 0 rgba(0,0,0,0.1); }
         #stage { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 100; flex-direction: column; align-items: center; justify-content: center; }
-        .char-box { font-size: 160px; color: #2d3436; margin: 10px; cursor: pointer; }
-        .nav-btns { position: absolute; bottom: 30px; display: flex; gap: 15px; }
-        .btn { width: 70px; height: 70px; border-radius: 50%; border: none; background: var(--ana); color: white; font-size: 28px; cursor: pointer; }
+        .char-box { font-size: 150px; color: #2d3436; margin-bottom: 20px; cursor: pointer; }
+        .btn-row { display: flex; gap: 15px; }
+        .circle { width: 70px; height: 70px; border-radius: 50%; border: none; background: var(--ana); color: white; font-size: 25px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <div class="header">
     <img src="kiz.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'" class="ayse-img">
-    <h1 style="color: var(--ana); margin: 10px 0; font-size: 24px;">Ayşe'nin Elif-Ba Mektebi</h1>
+    <h2 style="color: var(--ana); margin: 5px 0;">Hoş Geldin Ayşe!</h2>
 </div>
 
-<div class="menu">
-    <button class="ada-btn" style="background:#ff7675;" onclick="start('harf')">🎨 28 Harf</button>
-    <button class="ada-btn" style="background:#fdcb6e;" onclick="start('ustun')">☀️ Üstün (E)</button>
-    <button class="ada-btn" style="background:#48dbfb;" onclick="start('esre')">💧 Esre (İ)</button>
-    <button class="ada-btn" style="background:#1dd1a1;" onclick="start('otre')">🌀 Ötre (Ü)</button>
-    <button class="ada-btn" style="background:#5f27cd;" onclick="start('sedde')">⚡ Şedde</button>
-    <button class="ada-btn" style="background:#222f3e;" onclick="start('cezm')">🔗 Cezm</button>
+<div class="grid">
+    <button class="ada-btn" style="background:#ff7675;" onclick="basla('harf')">🎨 28 Harf</button>
+    <button class="ada-btn" style="background:#fdcb6e;" onclick="basla('ustun')">☀️ Üstün (E-A)</button>
+    <button class="ada-btn" style="background:#00b894;" onclick="basla('sedde')">⚡ Şedde</button>
+    <button class="ada-btn" style="background:#0984e3;" onclick="basla('dua')">📖 Dualar</button>
 </div>
 
 <div id="stage">
-    <button onclick="home()" style="position:absolute; top:20px; right:20px; font-size:35px; border:none; background:none;">🏠</button>
-    <div id="char" class="char-box" onclick="play()"></div>
-    <h2 id="label" style="color: var(--ana); font-size: 28px;"></h2>
-    <div class="nav-btns">
-        <button class="btn" onclick="nav(-1)">⬅</button>
-        <button class="btn" style="background:var(--pembe)" onclick="play()">🔊</button>
-        <button class="btn" onclick="nav(1)">➡</button>
+    <button onclick="home()" style="position:absolute; top:20px; right:20px; font-size:30px; border:none; background:none;">🏠</button>
+    <div id="letter" class="char-box" onclick="sesCal()"></div>
+    <h3 id="name" style="color: var(--ana);"></h3>
+    <div class="btn-row">
+        <button class="circle" onclick="yuru(-1)">⬅</button>
+        <button class="circle" style="background:var(--pembe)" onclick="sesCal()">🔊</button>
+        <button class="circle" onclick="yuru(1)">➡</button>
     </div>
 </div>
 
 <script>
-    const B = "https://kuran.diyanet.gov.tr/sounds/elifba/";
-    // TÜM HARFLERİN LİSTESİ (28 HARF)
-    const letters = [
+    const D_SES = "https://kuran.diyanet.gov.tr/sounds/elifba/";
+    const HARFLER = [
         {t:'ا', n:'Elif', s:'1.mp3'}, {t:'ب', n:'Be', s:'2.mp3'}, {t:'ت', n:'Te', s:'3.mp3'}, {t:'ث', n:'Se', s:'4.mp3'},
         {t:'ج', n:'Cim', s:'5.mp3'}, {t:'ح', n:'Ha', s:'6.mp3'}, {t:'خ', n:'Hı', s:'7.mp3'}, {t:'د', n:'Dal', s:'8.mp3'},
         {t:'ذ', n:'Zel', s:'9.mp3'}, {t:'ر', n:'Ra', s:'10.mp3'}, {t:'ز', n:'Ze', s:'11.mp3'}, {t:'س', n:'Sin', s:'12.mp3'},
@@ -62,43 +55,43 @@
         {t:'ن', n:'Nun', s:'25.mp3'}, {t:'و', n:'Vav', s:'26.mp3'}, {t:'ه', n:'He', s:'27.mp3'}, {t:'ي', n:'Ye', s:'28.mp3'}
     ];
 
-    const DB = {
-        harf: letters,
-        ustun: letters.map((l, i) => ({t: l.t + 'َ', n: l.n + ' Üstün', s: (100 + i) + '.mp3'})), // Örnek yol
-        esre: letters.map((l, i) => ({t: l.t + 'ِ', n: l.n + ' Esre', s: (200 + i) + '.mp3'})),
-        otre: letters.map((l, i) => ({t: l.t + 'ُ', n: l.n + ' Ötre', s: (300 + i) + '.mp3'})),
+    const DATA = {
+        harf: HARFLER,
+        ustun: HARFLER.map((l, i) => ({t: l.t + 'َ', n: l.n + ' Üstün', s: (i+1) + '.mp3'})), // Geçici ses mantığı
         sedde: [{t:'اَبَّ', n:'Eb-be', s:'16.mp3'}, {t:'اَتَّ', n:'Et-te', s:'16b.mp3'}],
-        cezm: [{t:'اَبْ', n:'Eb', s:'15.mp3'}]
+        dua: [{t:'🤲', n:'Sübhâneke', s:'https://kuran.diyanet.gov.tr/sounds/dualar/subhaneke.mp3'}]
     };
 
-    let mode = 'harf', idx = 0;
+    let mod = 'harf', i = 0;
 
-    function start(m) {
-        mode = m; idx = 0;
+    function basla(m) {
+        mod = m; i = 0;
         document.getElementById('stage').style.display = 'flex';
-        update();
+        goster();
     }
 
-    function update() {
-        const item = DB[mode][idx];
-        document.getElementById('char').innerText = item.t;
-        document.getElementById('label').innerText = item.n;
-        play();
-        if(idx === DB[mode].length - 1) confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+    function goster() {
+        const item = DATA[mod][i];
+        document.getElementById('letter').innerText = item.t;
+        document.getElementById('name').innerText = item.n;
+        sesCal();
+        if(i === DATA[mod].length - 1) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     }
 
-    function play() { 
-        let s = DB[mode][idx].s;
-        let audio = new Audio(s.startsWith('http') ? s : B + s);
-        audio.play().catch(() => console.log("Lütfen ekrana dokunun!"));
+    function sesCal() {
+        let s = DATA[mod][i].s;
+        let url = s.startsWith('http') ? s : D_SES + s;
+        let audio = new Audio(url);
+        audio.play().catch(e => alert("Sesi duymak için ekrana bir kez dokunun!"));
     }
 
-    function nav(d) { 
-        idx += d; 
-        if(idx >= DB[mode].length) idx = 0; 
-        if(idx < 0) idx = DB[mode].length - 1; 
-        update(); 
+    function yuru(yon) {
+        i += yon;
+        if(i >= DATA[mod].length) i = 0;
+        if(i < 0) i = DATA[mod].length - 1;
+        goster();
     }
+
     function home() { document.getElementById('stage').style.display = 'none'; }
 </script>
 </body>
