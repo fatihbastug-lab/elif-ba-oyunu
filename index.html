@@ -3,105 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ayşe'nin Elif-Ba Dünyası</title>
+    <title>Ayşe Elif-Ba Dünyası</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --ana: #6c5ce7; --pembe: #ff78ac; --sari: #feca57; --mavi: #48dbfb; }
-        body { margin: 0; padding: 0; font-family: 'Comic Sans MS', cursive; background: #a29bfe; overflow-x: hidden; text-align: center; user-select: none; }
+        :root { --ana: #6c5ce7; --pembe: #ff78ac; --sari: #feca57; }
+        body { margin: 0; padding: 0; font-family: 'Comic Sans MS', cursive; background: #a29bfe; text-align: center; }
         
-        /* Hareketli Arka Plan */
-        .cloud { position: fixed; background: white; border-radius: 50px; opacity: 0.3; z-index: -1; animation: move 15s infinite linear; }
-        @keyframes move { from { left: -100px; } to { left: 100%; } }
+        .header { background: white; padding: 25px; border-bottom: 8px solid var(--sari); border-radius: 0 0 60px 60px; }
+        .ayse-img { width: 130px; height: 130px; border: 6px solid var(--pembe); border-radius: 50%; object-fit: cover; background: #eee; }
+        
+        .menu { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; padding: 20px; max-width: 500px; margin: 0 auto; }
+        .ada-btn { padding: 20px; border-radius: 25px; border: none; color: white; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 6px 0 rgba(0,0,0,0.1); }
+        .ada-btn:active { transform: translateY(4px); box-shadow: none; }
 
-        /* Üst Panel */
-        .header { background: white; padding: 30px 10px; border-bottom: 8px solid var(--sari); border-radius: 0 0 60px 60px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); }
-        .ayse-img { width: 140px; height: 140px; border: 6px solid var(--pembe); border-radius: 50%; object-fit: cover; animation: bounce 2s infinite; background: #eee; }
-        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
-
-        /* Menü Kartları */
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; padding: 25px; max-width: 500px; margin: 0 auto; }
-        .card { padding: 20px; border-radius: 25px; border: none; color: white; font-size: 18px; font-weight: bold; cursor: pointer; box-shadow: 0 6px 0 rgba(0,0,0,0.2); transition: 0.1s; }
-        .card:active { transform: translateY(6px); box-shadow: none; }
-
-        /* Oyun Sahnesi */
-        #game { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 100; flex-direction: column; align-items: center; justify-content: center; }
-        .char { font-size: 160px; color: #2d3436; margin: 10px; cursor: pointer; text-shadow: 3px 3px #eee; }
-        .btn-row { display: flex; gap: 20px; margin-top: 50px; }
-        .btn { width: 70px; height: 70px; border-radius: 50%; border: none; background: var(--ana); color: white; font-size: 30px; cursor: pointer; }
+        #stage { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 100; flex-direction: column; align-items: center; justify-content: center; }
+        .char-box { font-size: 160px; color: #2d3436; margin: 10px; cursor: pointer; }
+        .nav-btns { position: absolute; bottom: 30px; display: flex; gap: 15px; }
+        .btn { width: 70px; height: 70px; border-radius: 50%; border: none; background: var(--ana); color: white; font-size: 28px; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div class="cloud" style="top:10%; width:100px; height:40px;"></div>
-<div class="cloud" style="top:20%; width:150px; height:50px; animation-delay: 5s;"></div>
-
 <div class="header">
     <img src="kiz.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'" class="ayse-img">
-    <h1 style="color: var(--ana); margin: 10px 0;">Selam Prenses Ayşe!</h1>
-    <p style="color: #666;">Bugün hangi adaya gidelim?</p>
+    <h1 style="color: var(--ana); margin: 10px 0; font-size: 24px;">Ayşe'nin Elif-Ba Mektebi</h1>
 </div>
 
-<div class="grid">
-    <button class="card" style="background:#ff7675;" onclick="go('harf')">🍎 Harfler</button>
-    <button class="card" style="background:#fdcb6e;" onclick="go('hareke')">🌈 Harekeler</button>
-    <button class="card" style="background:#00b894;" onclick="go('cezm')">🔗 Cezm</button>
-    <button class="card" style="background:#0984e3;" onclick="go('sedde')">⚡ Şedde</button>
-    <button class="card" style="background:#6c5ce7;" onclick="go('med')">📏 Uzatma</button>
-    <button class="card" style="background:#d63031;" onclick="go('dua')">🤲 Dualar</button>
+<div class="menu">
+    <button class="ada-btn" style="background:#ff7675;" onclick="start('harf')">🎨 28 Harf</button>
+    <button class="ada-btn" style="background:#fdcb6e;" onclick="start('ustun')">☀️ Üstün (E)</button>
+    <button class="ada-btn" style="background:#48dbfb;" onclick="start('esre')">💧 Esre (İ)</button>
+    <button class="ada-btn" style="background:#1dd1a1;" onclick="start('otre')">🌀 Ötre (Ü)</button>
+    <button class="ada-btn" style="background:#5f27cd;" onclick="start('sedde')">⚡ Şedde</button>
+    <button class="ada-btn" style="background:#222f3e;" onclick="start('cezm')">🔗 Cezm</button>
 </div>
 
-<div id="game">
-    <button onclick="home()" style="position:absolute; top:20px; right:20px; font-size:40px; border:none; background:none;">🏠</button>
-    <div id="big-char" class="char" onclick="speak()"></div>
-    <h2 id="char-name" style="color: var(--ana);"></h2>
-    <div class="btn-row">
+<div id="stage">
+    <button onclick="home()" style="position:absolute; top:20px; right:20px; font-size:35px; border:none; background:none;">🏠</button>
+    <div id="char" class="char-box" onclick="play()"></div>
+    <h2 id="label" style="color: var(--ana); font-size: 28px;"></h2>
+    <div class="nav-btns">
         <button class="btn" onclick="nav(-1)">⬅</button>
-        <button class="btn" style="background:var(--pembe)" onclick="speak()">🔊</button>
+        <button class="btn" style="background:var(--pembe)" onclick="play()">🔊</button>
         <button class="btn" onclick="nav(1)">➡</button>
     </div>
 </div>
 
 <script>
-    const URL = "https://kuran.diyanet.gov.tr/sounds/elifba/";
-    const DATA = {
-        harf: [{t:'ا', n:'Elif', s:'1.mp3'}, {t:'ب', n:'Be', s:'2.mp3'}, {t:'ت', n:'Te', s:'3.mp3'}, {t:'ث', n:'Se', s:'4.mp3'}],
-        hareke: [{t:'اَ', n:'Üstün', s:'11.mp3'}, {t:'اِ', n:'Esre', s:'11b.mp3'}, {t:'اُ', n:'Ötre', s:'11c.mp3'}],
-        cezm: [{t:'اَبْ', n:'Cezm', s:'15.mp3'}],
-        sedde: [{t:'اَبَّ', n:'Şedde', s:'16.mp3'}],
-        med: [{t:'بَا', n:'Asar', s:'17.mp3'}],
-        dua: [{t:'🤲', n:'Sübhâneke', s:'https://kuran.diyanet.gov.tr/sounds/dualar/subhaneke.mp3', full: true}]
+    const B = "https://kuran.diyanet.gov.tr/sounds/elifba/";
+    // TÜM HARFLERİN LİSTESİ (28 HARF)
+    const letters = [
+        {t:'ا', n:'Elif', s:'1.mp3'}, {t:'ب', n:'Be', s:'2.mp3'}, {t:'ت', n:'Te', s:'3.mp3'}, {t:'ث', n:'Se', s:'4.mp3'},
+        {t:'ج', n:'Cim', s:'5.mp3'}, {t:'ح', n:'Ha', s:'6.mp3'}, {t:'خ', n:'Hı', s:'7.mp3'}, {t:'د', n:'Dal', s:'8.mp3'},
+        {t:'ذ', n:'Zel', s:'9.mp3'}, {t:'ر', n:'Ra', s:'10.mp3'}, {t:'ز', n:'Ze', s:'11.mp3'}, {t:'س', n:'Sin', s:'12.mp3'},
+        {t:'ش', n:'Şın', s:'13.mp3'}, {t:'ص', n:'Sad', s:'14.mp3'}, {t:'ض', n:'Dad', s:'15.mp3'}, {t:'ط', n:'Tı', s:'16.mp3'},
+        {t:'ظ', n:'Zı', s:'17.mp3'}, {t:'ع', n:'Ayın', s:'18.mp3'}, {t:'غ', n:'Gayın', s:'19.mp3'}, {t:'ف', n:'Fe', s:'20.mp3'},
+        {t:'ق', n:'Kaf', s:'21.mp3'}, {t:'ك', n:'Kef', s:'22.mp3'}, {t:'ل', n:'Lam', s:'23.mp3'}, {t:'م', n:'Mim', s:'24.mp3'},
+        {t:'ن', n:'Nun', s:'25.mp3'}, {t:'و', n:'Vav', s:'26.mp3'}, {t:'ه', n:'He', s:'27.mp3'}, {t:'ي', n:'Ye', s:'28.mp3'}
+    ];
+
+    const DB = {
+        harf: letters,
+        ustun: letters.map((l, i) => ({t: l.t + 'َ', n: l.n + ' Üstün', s: (100 + i) + '.mp3'})), // Örnek yol
+        esre: letters.map((l, i) => ({t: l.t + 'ِ', n: l.n + ' Esre', s: (200 + i) + '.mp3'})),
+        otre: letters.map((l, i) => ({t: l.t + 'ُ', n: l.n + ' Ötre', s: (300 + i) + '.mp3'})),
+        sedde: [{t:'اَبَّ', n:'Eb-be', s:'16.mp3'}, {t:'اَتَّ', n:'Et-te', s:'16b.mp3'}],
+        cezm: [{t:'اَبْ', n:'Eb', s:'15.mp3'}]
     };
 
-    let cur = 'harf', i = 0;
+    let mode = 'harf', idx = 0;
 
-    function go(m) { 
-        cur = m; i = 0; 
-        document.getElementById('game').style.display = 'flex'; 
-        show(); 
+    function start(m) {
+        mode = m; idx = 0;
+        document.getElementById('stage').style.display = 'flex';
+        update();
     }
 
-    function show() {
-        const item = DATA[cur][i];
-        document.getElementById('big-char').innerText = item.t;
-        document.getElementById('char-name').innerText = item.n;
-        speak();
-        if(i === DATA[cur].length - 1) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    function update() {
+        const item = DB[mode][idx];
+        document.getElementById('char').innerText = item.t;
+        document.getElementById('label').innerText = item.n;
+        play();
+        if(idx === DB[mode].length - 1) confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
     }
 
-    function speak() {
-        let s = DATA[cur][i].s;
-        let src = s.startsWith('http') ? s : URL + s;
-        new Audio(src).play();
+    function play() { 
+        let s = DB[mode][idx].s;
+        let audio = new Audio(s.startsWith('http') ? s : B + s);
+        audio.play().catch(() => console.log("Lütfen ekrana dokunun!"));
     }
 
-    function nav(d) {
-        i += d;
-        if(i >= DATA[cur].length) i = 0;
-        if(i < 0) i = DATA[cur].length - 1;
-        show();
+    function nav(d) { 
+        idx += d; 
+        if(idx >= DB[mode].length) idx = 0; 
+        if(idx < 0) idx = DB[mode].length - 1; 
+        update(); 
     }
-
-    function home() { document.getElementById('game').style.display = 'none'; }
+    function home() { document.getElementById('stage').style.display = 'none'; }
 </script>
 </body>
 </html>
