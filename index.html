@@ -3,79 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ayşe'nin Elif-Ba Akademisi</title>
+    <title>Ayşe'nin Elif-Ba Dünyası</title>
     <style>
         body { 
-            background-color: #FFF9C4; 
+            /* Arka planı daha canlı ve yumuşak bir sarı-turuncu yaptık */
+            background: linear-gradient(135deg, #FFF9C4 0%, #FFECB3 100%); 
             text-align: center; 
             font-family: 'Comic Sans MS', sans-serif; 
             margin: 0; padding: 20px;
+            min-height: 100vh;
         }
-        .ana-buton { 
-            background-color: #FFD600; border: none; padding: 15px 30px; 
-            font-size: 20px; border-radius: 50px; cursor: pointer; 
-            box-shadow: 0 5px #F57F17; color: #5D4037; font-weight: bold; margin: 10px;
-        }
-        .ana-buton:active { transform: translateY(2px); box-shadow: 0 2px #F57F17; }
         
-        #harf-listesi {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 10px;
-            max-width: 400px;
-            margin: 20px auto;
+        /* Bilgi Mesaj Kutusu (Alert yerine) */
+        #bilgi-kutusu {
+            background: white; border-radius: 15px; padding: 10px;
+            margin: 10px auto; width: 80%; max-width: 300px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            color: #5D4037; font-weight: bold; min-height: 40px;
+            display: flex; align-items: center; justify-content: center;
         }
+
+        .ana-buton { 
+            background-color: #FF7043; border: none; padding: 15px 25px; 
+            font-size: 18px; border-radius: 50px; cursor: pointer; 
+            box-shadow: 0 5px #D84315; color: white; font-weight: bold; margin: 8px;
+        }
+
+        #harf-listesi {
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+            max-width: 400px; margin: 20px auto;
+        }
+
         .harf-kart {
             background: white; border: 3px solid #FFD600; padding: 15px;
-            font-size: 40px; border-radius: 15px; cursor: pointer;
+            font-size: 35px; border-radius: 20px; cursor: pointer;
+            transition: transform 0.2s;
         }
-        #boyama-alani { display: none; }
+        .harf-kart:hover { transform: scale(1.1); }
+
         #tuval-konteynir {
-            position: relative; width: 300px; height: 350px; margin: 0 auto;
-            border: 8px solid #FFD600; border-radius: 20px; background: white;
+            position: relative; width: 280px; height: 350px; margin: 10px auto;
+            border: 10px solid #FFD600; border-radius: 30px; background: white;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
         }
+
         #alt-harf {
-            position: absolute; width: 100%; height: 100%; font-size: 200px;
+            position: absolute; width: 100%; height: 100%; font-size: 180px;
             display: flex; align-items: center; justify-content: center; color: #FFD600;
         }
-        canvas { position: absolute; top: 0; left: 0; touch-action: none; border-radius: 12px; }
-        .hareke-butonlar { margin-top: 20px; }
+
+        canvas { position: absolute; top: 0; left: 0; touch-action: none; border-radius: 20px; }
     </style>
 </head>
 <body>
 
     <div id="ana-menu">
-        <img src="kiz.png" style="width: 100px; border-radius: 50%;">
-        <h1>Elif-Ba Akademisi 🌸</h1>
+        <img src="kiz.png" style="width: 120px; border-radius: 50%; border: 5px solid white;">
+        <h1 style="color: #E64A19;">Elif-Ba Akademisi 🌸</h1>
+        <div id="bilgi-kutusu">Bir harf seçip başlayalım! 😊</div>
         <div id="harf-listesi"></div>
     </div>
 
-    <div id="boyama-alani">
-        <button class="ana-buton" onclick="menuyeDon()">⬅ Geri Dön</button>
+    <div id="boyama-alani" style="display: none;">
+        <button class="ana-buton" onclick="menuyeDon()">⬅ Geri</button>
+        <div id="bilgi-kutusu-ders">Harfi parmağınla ortaya çıkar! ✨</div>
+        
         <div id="tuval-konteynir">
             <div id="alt-harf"></div>
             <canvas id="boyama-tuvali"></canvas>
         </div>
         
-        <div class="hareke-butonlar">
-            <button class="ana-buton" style="font-size: 14px;" onclick="harekeEkle('َ')">Üstün (E)</button>
-            <button class="ana-buton" style="font-size: 14px;" onclick="harekeEkle('ِ')">Esre (İ)</button>
-            <button class="ana-buton" style="font-size: 14px;" onclick="harekeEkle('ُ')">Ötre (Ü)</button>
-            <br>
-            <button class="ana-buton" style="font-size: 14px; background: #81C784;" onclick="harekeEkle('ْ')">Cezim</button>
-            <button class="ana-buton" style="font-size: 14px; background: #81C784;" onclick="harekeEkle('ّ')">Şedde</button>
+        <div id="kontroller">
+            <button class="ana-buton" style="background:#4DB6AC; box-shadow: 0 5px #00897B;" onclick="ipucuVer()">💡 İpucu Al</button>
+            <button class="ana-buton" onclick="harekeEkle('ّ')">Güçlü Oku (Şedde)</button>
         </div>
     </div>
 
     <script>
-        const harfler = ["ا", "ب", "ت", "ث", "ج", "ح", "خ", "د", "ذ", "ر", "ز", "س", "ş", "ص", "ض", "ط", "ظ", "ع", "غ", "ف", "ق", "ك", "ل", "م", "ن", "و", "ه", "لا", "ي"];
+        // Harfler ve küçük ipuçları (Örnek olarak birkaçı)
+        const harfBilgileri = {
+            "ا": "Bu Elif! İnce ve dik bir harf. 📏",
+            "ب": "Bu Be! Altında bir tane noktası var. 🍎",
+            "ت": "Bu Te! Üstünde iki gözü var. 👀",
+            "خ": "Bu Ha! Boğazdan gelen kalın bir ses. 🗣️",
+            "و": "Bu Vav! Dudaklarını büzerek söylemelisin. 😗"
+        };
+        
+        const harfler = Object.keys(harfBilgileri).length > 0 ? Object.keys(harfBilgileri) : ["ا", "ب", "ت", "ث", "ج"]; 
         const liste = document.getElementById('harf-listesi');
         const canvas = document.getElementById('boyama-tuvali');
         const ctx = canvas.getContext('2d');
         let suankiHarf = "";
         let ciziyorMu = false;
 
-        // Harf Listesini Oluştur
         harfler.forEach(h => {
             const div = document.createElement('div');
             div.className = 'harf-kart';
@@ -89,22 +109,26 @@
             document.getElementById('ana-menu').style.display = 'none';
             document.getElementById('boyama-alani').style.display = 'block';
             document.getElementById('alt-harf').innerText = h;
+            document.getElementById('bilgi-kutusu-ders').innerText = "Harfi keşfetmeye başla! ✨";
             
-            canvas.width = 300;
-            canvas.height = 350;
+            canvas.width = 280; canvas.height = 350;
             sifirla();
         }
 
-        function harekeEkle(hareke) {
-            document.getElementById('alt-harf').innerText = suankiHarf + hareke;
+        function ipucuVer() {
+            const mesaj = harfBilgileri[suankiHarf] || "Bu çok özel bir harf! ✨";
+            document.getElementById('bilgi-kutusu-ders').innerText = mesaj;
+        }
+
+        function harekeEkle(h) {
+            document.getElementById('alt-harf').innerText = suankiHarf + h;
+            document.getElementById('bilgi-kutusu-ders').innerText = "Şimdi harfimiz daha güçlü! 💪";
             sifirla();
-            // Ses çalma mantığı buraya eklenebilir
-            alert(suankiHarf + " harfine işaret eklendi! ✨");
         }
 
         function sifirla() {
             ctx.globalCompositeOperation = 'source-over';
-            ctx.fillStyle = '#D1D1D1';
+            ctx.fillStyle = '#CFD8DC';
             ctx.fillRect(0, 0, canvas.width, canvas.height);
             ctx.globalCompositeOperation = 'destination-out';
         }
@@ -114,26 +138,26 @@
             document.getElementById('boyama-alani').style.display = 'none';
         }
 
-        // Çizim olayları (Mousedown, Mousemove, Touch vb.) öncekiyle aynı mantıkta devam eder...
+        // Çizim Mantığı
+        const ciz = (x, y) => {
+            ctx.beginPath(); ctx.arc(x, y, 25, 0, Math.PI * 2); ctx.fill();
+        }
+
         canvas.addEventListener('mousedown', () => ciziyorMu = true);
         window.addEventListener('mouseup', () => ciziyorMu = false);
         canvas.addEventListener('mousemove', (e) => {
             if (!ciziyorMu) return;
-            const rect = canvas.getBoundingClientRect();
-            ctx.beginPath();
-            ctx.arc(e.clientX - rect.left, e.clientY - rect.top, 30, 0, Math.PI * 2);
-            ctx.fill();
+            const r = canvas.getBoundingClientRect();
+            ciz(e.clientX - r.left, e.clientY - r.top);
         });
-        
-        // Mobil dokunmatik desteği
+
         canvas.addEventListener('touchmove', (e) => {
-            const rect = canvas.getBoundingClientRect();
-            const touch = e.touches[0];
-            ctx.beginPath();
-            ctx.arc(touch.clientX - rect.left, touch.clientY - rect.top, 30, 0, Math.PI * 2);
-            ctx.fill();
+            const r = canvas.getBoundingClientRect();
+            const t = e.touches[0];
+            ciz(t.clientX - r.left, t.clientY - r.top);
             e.preventDefault();
         }, {passive: false});
+
     </script>
 </body>
 </html>
