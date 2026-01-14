@@ -12,22 +12,35 @@
         .ayse-img { width: 120px; height: 120px; border: 5px solid var(--pembe); border-radius: 50%; object-fit: cover; background: #fff; }
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 20px; max-width: 400px; margin: 0 auto; }
         .ada-btn { padding: 20px; border-radius: 20px; border: none; color: white; font-weight: bold; cursor: pointer; box-shadow: 0 5px 0 rgba(0,0,0,0.1); font-size: 16px; }
+        
+        /* Başlat Ekranı (Ses Engelini Aşmak İçin) */
+        #start-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #a29bfe; z-index: 200; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .play-btn { width: 150px; height: 150px; border-radius: 50%; border: none; background: white; font-size: 60px; cursor: pointer; box-shadow: 0 10px 0 var(--ana); }
+
         #stage { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 100; flex-direction: column; align-items: center; justify-content: center; }
-        .char-box { font-size: 140px; color: #2d3436; margin-bottom: 10px; cursor: pointer; height: 180px; display: flex; align-items: center; justify-content: center; }
+        .char-box { font-size: 120px; color: #2d3436; margin-bottom: 10px; cursor: pointer; height: 160px; display: flex; align-items: center; justify-content: center; }
         .btn-row { display: flex; gap: 15px; margin-top: 20px; }
         .circle { width: 70px; height: 70px; border-radius: 50%; border: none; background: var(--ana); color: white; font-size: 25px; cursor: pointer; }
     </style>
 </head>
-<body onclick="sesKilidiniAc()"> <div class="header">
+<body>
+
+<div id="start-screen">
+    <div style="font-size: 80px; margin-bottom: 20px;">👑</div>
+    <button class="play-btn" onclick="oyunuAc()">▶️</button>
+    <h1 style="color: white;">Ayşe İçin Başlat</h1>
+</div>
+
+<div class="header">
     <img src="kiz.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'" class="ayse-img">
-    <h2 style="color: var(--ana); margin: 5px 0;">Hoş Geldin Prenses Ayşe!</h2>
+    <h2 style="color: var(--ana); margin: 5px 0;">Ayşe Elif-Ba Öğreniyor</h2>
 </div>
 
 <div class="grid">
     <button class="ada-btn" style="background:#ff7675;" onclick="basla('harf')">🎨 Tüm Harfler</button>
-    <button class="ada-btn" style="background:#fdcb6e;" onclick="basla('ustun')">☀️ Üstün (E-A)</button>
-    <button class="ada-btn" style="background:#00b894;" onclick="basla('sedde')">⚡ Şedde</button>
-    <button class="ada-btn" style="background:#0984e3;" onclick="basla('dua')">🤲 Dualar</button>
+    <button class="ada-btn" style="background:#fdcb6e;" onclick="basla('ustun')">☀️ Üstünler</button>
+    <button class="ada-btn" style="background:#00b894;" onclick="basla('sedde')">⚡ Şeddeler</button>
+    <button class="ada-btn" style="background:#0984e3;" onclick="basla('dua')">📖 Tüm Dualar</button>
 </div>
 
 <div id="stage">
@@ -42,7 +55,7 @@
 </div>
 
 <script>
-    const D_SES = "https://kuran.diyanet.gov.tr/sounds/elifba/";
+    const D_BASE = "https://kuran.diyanet.gov.tr/sounds/elifba/";
     const D_DUA = "https://kuran.diyanet.gov.tr/sounds/dualar/";
 
     const HARFLER = [
@@ -57,22 +70,27 @@
 
     const DATA = {
         harf: HARFLER,
-        ustun: HARFLER.map((l, i) => ({t: l.t + 'َ', n: l.n + ' Üstün', s: (i+1) + '.mp3'})),
+        ustun: HARFLER.map((l, idx) => ({t: l.t + 'َ', n: l.n + ' Üstün', s: (11 + idx) + '.mp3'})), // Diyanet Üstün sırası 11'den başlar
         sedde: [
-            {t:'اَبَّ', n:'Eb-be', s:'16.mp3'}, {t:'اَتَّ', n:'Et-te', s:'16b.mp3'},
-            {t:'اِنَّ', n:'İn-ne', s:'16c.mp3'}, {t:'اَلَّ', n:'El-le', s:'16d.mp3'}
+            {t:'اَبَّ', n:'Eb-be', s:'16.mp3'}, {t:'اَتَّ', n:'Et-te', s:'16a.mp3'}, {t:'اَثَّ', n:'Es-se', s:'16b.mp3'},
+            {t:'اَجَّ', n:'Ec-ce', s:'16c.mp3'}, {t:'اَدَّ', n:'Ed-de', s:'16d.mp3'}, {t:'اَرَّ', n:'Er-re', s:'16e.mp3'}
         ],
         dua: [
             {t:'🤲', n:'Sübhâneke', s:D_DUA + 'subhaneke.mp3'},
-            {t:'✨', n:'Fatiha', s:D_DUA + 'fatiha.mp3'},
-            {t:'🛡️', n:'İhlas', s:D_DUA + 'ihlas.mp3'},
-            {t:'🌊', n:'Kevser', s:D_DUA + 'kevser.mp3'}
+            {t:'📖', n:'Fatiha', s:D_DUA + 'fatiha.mp3'},
+            {t:'✨', n:'İhlas', s:D_DUA + 'ihlas.mp3'},
+            {t:'🛡️', n:'Kevser', s:D_DUA + 'kevser.mp3'},
+            {t:'🐘', n:'Fil Suresi', s:D_DUA + 'fil.mp3'}
         ]
     };
 
-    let mod = 'harf', i = 0, sesli = false;
+    let mod = 'harf', i = 0;
 
-    function sesKilidiniAc() { sesli = true; }
+    function oyunuAc() {
+        document.getElementById('start-screen').style.display = 'none';
+        // Sessiz bir ses oynatarak ses kilidini açıyoruz
+        new Audio(D_BASE + '1.mp3').play().then(a => a.pause());
+    }
 
     function basla(m) {
         mod = m; i = 0;
@@ -84,14 +102,15 @@
         const item = DATA[mod][i];
         document.getElementById('letter').innerText = item.t;
         document.getElementById('name').innerText = item.n;
-        if(sesli) sesCal();
+        sesCal();
         if(i === DATA[mod].length - 1) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     }
 
     function sesCal() {
         let s = DATA[mod][i].s;
-        let url = s.startsWith('http') ? s : D_SES + s;
-        new Audio(url).play().catch(e => console.log("İlk dokunuş bekleniyor"));
+        let url = s.includes('http') ? s : D_BASE + s;
+        let a = new Audio(url);
+        a.play().catch(e => console.log("Ses çalınamadı."));
     }
 
     function yuru(yon) {
