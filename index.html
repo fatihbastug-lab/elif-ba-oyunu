@@ -3,60 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Ayşe Elif-Ba Mektebi</title>
+    <title>Ayşe'nin Elif-Ba Mektebi</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root { --ana: #6c5ce7; --pembe: #ff78ac; --sari: #feca57; }
-        body { margin: 0; padding: 0; font-family: 'Comic Sans MS', cursive; background: #a29bfe; text-align: center; }
-        .header { background: white; padding: 20px; border-bottom: 8px solid var(--sari); border-radius: 0 0 50px 50px; }
-        .ayse-img { width: 120px; height: 120px; border: 5px solid var(--pembe); border-radius: 50%; object-fit: cover; background: #fff; }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 20px; max-width: 400px; margin: 0 auto; }
-        .ada-btn { padding: 20px; border-radius: 20px; border: none; color: white; font-weight: bold; cursor: pointer; box-shadow: 0 5px 0 rgba(0,0,0,0.1); font-size: 16px; }
+        :root { --ana: #6c5ce7; --pembe: #ff78ac; --sari: #feca57; --mavi: #48dbfb; --yesil: #1dd1a1; }
+        body { margin: 0; padding: 0; font-family: 'Comic Sans MS', cursive; background: #f0f2f5; text-align: center; }
         
-        /* Başlat Ekranı (Ses Engelini Aşmak İçin) */
-        #start-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #a29bfe; z-index: 200; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-        .play-btn { width: 150px; height: 150px; border-radius: 50%; border: none; background: white; font-size: 60px; cursor: pointer; box-shadow: 0 10px 0 var(--ana); }
+        /* Açılış Ekranı */
+        #splash { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--ana); z-index: 2000; display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; }
+        .btn-start { padding: 25px 60px; font-size: 28px; border-radius: 60px; border: none; background: var(--sari); color: #2d3436; cursor: pointer; box-shadow: 0 12px 0 #e1b12c; font-weight: bold; }
 
-        #stage { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 100; flex-direction: column; align-items: center; justify-content: center; }
-        .char-box { font-size: 120px; color: #2d3436; margin-bottom: 10px; cursor: pointer; height: 160px; display: flex; align-items: center; justify-content: center; }
-        .btn-row { display: flex; gap: 15px; margin-top: 20px; }
-        .circle { width: 70px; height: 70px; border-radius: 50%; border: none; background: var(--ana); color: white; font-size: 25px; cursor: pointer; }
+        .header { background: white; padding: 20px; border-bottom: 8px solid var(--sari); border-radius: 0 0 50px 50px; }
+        .ayse-img { width: 120px; height: 120px; border: 5px solid var(--pembe); border-radius: 50%; object-fit: cover; }
+        
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding: 15px; max-width: 600px; margin: 0 auto; }
+        .ada { padding: 18px 5px; border-radius: 20px; border: none; color: white; font-weight: bold; cursor: pointer; box-shadow: 0 5px 0 rgba(0,0,0,0.1); font-size: 14px; }
+
+        #stage { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: white; z-index: 1500; flex-direction: column; align-items: center; justify-content: center; }
+        .display-char { font-size: 140px; color: #2d3436; height: 200px; display: flex; align-items: center; justify-content: center; }
+        .controls { display: flex; gap: 20px; margin-top: 20px; }
+        .circle-btn { width: 80px; height: 80px; border-radius: 50%; border: none; background: var(--ana); color: white; font-size: 35px; cursor: pointer; box-shadow: 0 6px 0 #4834d4; }
     </style>
 </head>
 <body>
 
-<div id="start-screen">
-    <div style="font-size: 80px; margin-bottom: 20px;">👑</div>
-    <button class="play-btn" onclick="oyunuAc()">▶️</button>
-    <h1 style="color: white;">Ayşe İçin Başlat</h1>
+<div id="splash">
+    <div style="font-size: 100px;">👑</div>
+    <h1>Ayşe'nin Elif-Ba Dünyası</h1>
+    <button class="btn-start" onclick="ready()">BAŞLA ▶️</button>
 </div>
 
 <div class="header">
     <img src="kiz.png" onerror="this.src='https://cdn-icons-png.flaticon.com/512/3135/3135715.png'" class="ayse-img">
-    <h2 style="color: var(--ana); margin: 5px 0;">Ayşe Elif-Ba Öğreniyor</h2>
+    <h2 style="color: var(--ana); margin: 10px 0;">Hoş Geldin Ayşe!</h2>
 </div>
 
-<div class="grid">
-    <button class="ada-btn" style="background:#ff7675;" onclick="basla('harf')">🎨 Tüm Harfler</button>
-    <button class="ada-btn" style="background:#fdcb6e;" onclick="basla('ustun')">☀️ Üstünler</button>
-    <button class="ada-btn" style="background:#00b894;" onclick="basla('sedde')">⚡ Şeddeler</button>
-    <button class="ada-btn" style="background:#0984e3;" onclick="basla('dua')">📖 Tüm Dualar</button>
+<div class="menu-grid">
+    <button class="ada" style="background:var(--pembe);" onclick="openAda('harf')">🎨 28 Harf</button>
+    <button class="ada" style="background:var(--sari);" onclick="openAda('ustun')">☀️ Üstün (E-A)</button>
+    <button class="ada" style="background:var(--mavi);" onclick="openAda('esre')">💧 Esre (İ-I)</button>
+    <button class="ada" style="background:var(--yesil);" onclick="goDua()">🤲 Dualar</button>
+    <button class="ada" style="background:#a29bfe;" onclick="openAda('otre')">🌀 Ötre (Ü-U)</button>
+    <button class="ada" style="background:#ff7675;" onclick="openAda('sedde')">⚡ Şeddeler</button>
+    <button class="ada" style="background:#0984e3;" onclick="openAda('cezm')">🔗 Cezm (Bağlama)</button>
+    <button class="ada" style="background:#2d3436;" onclick="openAda('tenvin')">🔔 Tenvinler</button>
 </div>
 
 <div id="stage">
-    <button onclick="home()" style="position:absolute; top:20px; right:20px; font-size:30px; border:none; background:none;">🏠</button>
-    <div id="letter" class="char-box" onclick="sesCal()"></div>
-    <h3 id="name" style="color: var(--ana); font-size: 24px;"></h3>
-    <div class="btn-row">
-        <button class="circle" onclick="yuru(-1)">⬅</button>
-        <button class="circle" style="background:var(--pembe)" onclick="sesCal()">🔊</button>
-        <button class="circle" onclick="yuru(1)">➡</button>
+    <button onclick="exit()" style="position:absolute; top:20px; right:20px; font-size:40px; border:none; background:none;">🏠</button>
+    <div id="main-char" class="display-char" onclick="playCurrent()"></div>
+    <h3 id="main-label" style="color: var(--ana); font-size: 28px;"></h3>
+    <div class="controls">
+        <button class="circle-btn" onclick="nav(-1)">⬅</button>
+        <button class="circle-btn" style="background:var(--pembe)" onclick="playCurrent()">🔊</button>
+        <button class="circle-btn" onclick="nav(1)">➡</button>
     </div>
 </div>
 
 <script>
-    const D_BASE = "https://kuran.diyanet.gov.tr/sounds/elifba/";
-    const D_DUA = "https://kuran.diyanet.gov.tr/sounds/dualar/";
+    const SES_YOLU = "https://kuran.diyanet.gov.tr/sounds/elifba/";
+    const DUA_YOLU = "https://kuran.diyanet.gov.tr/sounds/dualar/";
 
     const HARFLER = [
         {t:'ا', n:'Elif', s:'1.mp3'}, {t:'ب', n:'Be', s:'2.mp3'}, {t:'ت', n:'Te', s:'3.mp3'}, {t:'ث', n:'Se', s:'4.mp3'},
@@ -70,57 +76,58 @@
 
     const DATA = {
         harf: HARFLER,
-        ustun: HARFLER.map((l, idx) => ({t: l.t + 'َ', n: l.n + ' Üstün', s: (11 + idx) + '.mp3'})), // Diyanet Üstün sırası 11'den başlar
-        sedde: [
-            {t:'اَبَّ', n:'Eb-be', s:'16.mp3'}, {t:'اَتَّ', n:'Et-te', s:'16a.mp3'}, {t:'اَثَّ', n:'Es-se', s:'16b.mp3'},
-            {t:'اَجَّ', n:'Ec-ce', s:'16c.mp3'}, {t:'اَدَّ', n:'Ed-de', s:'16d.mp3'}, {t:'اَرَّ', n:'Er-re', s:'16e.mp3'}
-        ],
+        ustun: HARFLER.map((l, i) => ({t: l.t + 'َ', n: l.n + ' Üstün', s: (11+i) + '.mp3'})),
+        esre: HARFLER.map((l, i) => ({t: l.t + 'ِ', n: l.n + ' Esre', s: (11+i) + 'b.mp3'})),
+        otre: HARFLER.map((l, i) => ({t: l.t + 'ُ', n: l.n + ' Ötre', s: (11+i) + 'c.mp3'})),
+        cezm: HARFLER.slice(0, 15).map(l => ({t: 'ا' + l.t + 'ْ', n: l.n + ' Cezm', s:'15.mp3'})),
+        sedde: HARFLER.slice(0, 15).map(l => ({t: 'ا' + l.t + 'َّ', n: l.n + ' Şedde', s:'16.mp3'})),
+        tenvin: HARFLER.slice(0, 15).map(l => ({t: l.t + 'ً', n: l.n + ' Tenvin', s:'14.mp3'})),
         dua: [
-            {t:'🤲', n:'Sübhâneke', s:D_DUA + 'subhaneke.mp3'},
-            {t:'📖', n:'Fatiha', s:D_DUA + 'fatiha.mp3'},
-            {t:'✨', n:'İhlas', s:D_DUA + 'ihlas.mp3'},
-            {t:'🛡️', n:'Kevser', s:D_DUA + 'kevser.mp3'},
-            {t:'🐘', n:'Fil Suresi', s:D_DUA + 'fil.mp3'}
+            {t:'🤲', n:'Sübhâneke', s:DUA_YOLU+'subhaneke.mp3'},
+            {t:'📖', n:'Fatiha', s:DUA_YOLU+'fatiha.mp3'},
+            {t:'✨', n:'İhlas', s:DUA_YOLU+'ihlas.mp3'},
+            {t:'🛡️', n:'Kevser', s:DUA_YOLU+'kevser.mp3'}
         ]
     };
 
-    let mod = 'harf', i = 0;
+    let activeMod = 'harf', activeIdx = 0, isReady = false;
 
-    function oyunuAc() {
-        document.getElementById('start-screen').style.display = 'none';
-        // Sessiz bir ses oynatarak ses kilidini açıyoruz
-        new Audio(D_BASE + '1.mp3').play().then(a => a.pause());
+    function ready() { 
+        document.getElementById('splash').style.display = 'none'; 
+        isReady = true;
+        new Audio(SES_YOLU + '1.mp3').play().then(a => {}).catch(e => {});
     }
 
-    function basla(m) {
-        mod = m; i = 0;
+    function openAda(m) {
+        activeMod = m; activeIdx = 0;
         document.getElementById('stage').style.display = 'flex';
-        goster();
+        updateUI();
     }
 
-    function goster() {
-        const item = DATA[mod][i];
-        document.getElementById('letter').innerText = item.t;
-        document.getElementById('name').innerText = item.n;
-        sesCal();
-        if(i === DATA[mod].length - 1) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+    function goDua() { openAda('dua'); }
+
+    function updateUI() {
+        const item = DATA[activeMod][activeIdx];
+        document.getElementById('main-char').innerText = item.t;
+        document.getElementById('main-label').innerText = item.n;
+        playCurrent();
+        if(activeIdx === DATA[activeMod].length - 1) confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
     }
 
-    function sesCal() {
-        let s = DATA[mod][i].s;
-        let url = s.includes('http') ? s : D_BASE + s;
-        let a = new Audio(url);
-        a.play().catch(e => console.log("Ses çalınamadı."));
+    function playCurrent() {
+        if(!isReady) return;
+        const s = DATA[activeMod][activeIdx].s;
+        new Audio(s.includes('http') ? s : SES_YOLU + s).play();
     }
 
-    function yuru(yon) {
-        i += yon;
-        if(i >= DATA[mod].length) i = 0;
-        if(i < 0) i = DATA[mod].length - 1;
-        goster();
+    function nav(d) {
+        activeIdx += d;
+        if(activeIdx >= DATA[activeMod].length) activeIdx = 0;
+        if(activeIdx < 0) activeIdx = DATA[activeMod].length - 1;
+        updateUI();
     }
 
-    function home() { document.getElementById('stage').style.display = 'none'; }
+    function exit() { document.getElementById('stage').style.display = 'none'; }
 </script>
 </body>
 </html>
