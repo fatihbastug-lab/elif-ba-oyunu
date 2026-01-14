@@ -3,127 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ayşe'nin Elif-Ba Dünyası 🎈</title>
+    <title>Ayşe'nin Kur'an Akademisi 📖</title>
     <style>
         :root { --ana: #FF7043; --mavi: #4FC3F7; --yesil: #81C784; --sari: #FFD600; }
         body { 
             background: linear-gradient(135deg, #FFF9C4 0%, #E3F2FD 100%); 
             font-family: 'Comic Sans MS', sans-serif; margin: 0; padding: 10px;
-            text-align: center; min-height: 100vh; overflow-x: hidden;
+            text-align: center; min-height: 100vh;
         }
         .ekran { display: none; max-width: 600px; margin: 0 auto; animation: fadeIn 0.5s; }
         .aktif { display: block; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Kart Yapısı */
-        .kart { background: white; border-radius: 30px; padding: 20px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); margin: 20px 0; border: 5px solid var(--sari); }
-        .harf-sekilleri { display: flex; justify-content: space-around; font-size: 50px; margin: 20px 0; direction: rtl; }
-        .sekil-kutu { background: #f0f0f0; padding: 10px; border-radius: 15px; width: 80px; }
-
+        /* Kart ve Lego Alanı */
+        .kart { background: white; border-radius: 30px; padding: 15px; border: 5px solid var(--sari); margin: 15px 0; }
+        .birlesik-alan { font-size: 80px; direction: rtl; min-height: 140px; display: flex; align-items: center; justify-content: center; background: #fff; border-radius: 20px; }
+        
         /* Butonlar */
         .ana-buton { 
-            background: var(--ana); color: white; border: none; padding: 15px 30px;
-            border-radius: 50px; font-size: 20px; font-weight: bold; cursor: pointer;
-            box-shadow: 0 6px #D84315; margin: 10px;
+            background: var(--ana); color: white; border: none; padding: 15px 25px;
+            border-radius: 50px; font-size: 18px; font-weight: bold; cursor: pointer;
+            box-shadow: 0 5px #D84315; margin: 10px; transition: 0.2s;
         }
-        .lego-btn { background: var(--mavi); border: 2px solid #0288D1; border-radius: 10px; padding: 10px; cursor: pointer; font-size: 30px; }
+        .ana-buton:active { transform: translateY(3px); box-shadow: none; }
+        
+        .lego-izgara { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .lego-btn { 
+            background: white; border: 3px solid var(--mavi); border-radius: 12px;
+            padding: 10px; cursor: pointer; font-size: 32px; transition: 0.2s;
+        }
+        .lego-btn:hover { background: #E1F5FE; }
 
-        /* Balon */
-        .balon { position: absolute; bottom: -100px; width: 60px; height: 80px; border-radius: 50%; animation: uc 4s linear forwards; }
+        .hareke-btn { 
+            width: 50px; height: 50px; font-size: 24px; border-radius: 12px;
+            border: none; background: var(--yesil); color: white; cursor: pointer; margin: 4px;
+            box-shadow: 0 4px #2E7D32;
+        }
+        
+        .harf-kart-sekil { display: flex; justify-content: space-around; font-size: 45px; direction: rtl; margin: 15px 0; }
+        .sekil-kutu { background: #F5F5F5; padding: 10px; border-radius: 15px; width: 85px; border: 2px solid #EEE; }
+        .sekil-kutu small { font-size: 14px; color: #666; display: block; margin-bottom: 5px; }
+
+        .balon { position: absolute; bottom: -100px; width: 50px; height: 70px; border-radius: 50%; animation: uc 4s linear forwards; z-index: 100; }
         @keyframes uc { to { transform: translateY(-120vh); } }
     </style>
 </head>
 <body>
 
     <div id="menu" class="ekran aktif">
-        <h1 style="color: #E64A19;">Ayşe'nin Dünyası 🌸</h1>
-        <button class="ana-buton" onclick="git('okul')">🏫 Harf Okulu</button>
-        <button class="ana-buton" style="background:var(--yesil); box-shadow:0 6px #2E7D32;" onclick="git('bahce')">🧩 Lego Bahçesi</button>
+        <h1 style="color: #E64A19; font-size: 35px; text-shadow: 2px 2px white;">Ayşe'nin Akademisi 🌸</h1>
+        <div style="margin-top: 50px;">
+            <button class="ana-buton" onclick="git('okul')">🏫 Harf Okulu</button>
+            <p style="color: #78909C;">Harfleri ve şekillerini tanı!</p>
+            <br>
+            <button class="ana-buton" style="background:var(--yesil); box-shadow:0 6px #2E7D32;" onclick="git('bahce')">🧩 Lego Bahçesi</button>
+            <p style="color: #78909C;">Harfleri birleştir, kelime yap!</p>
+        </div>
     </div>
 
     <div id="okul" class="ekran">
-        <button class="ana-buton" style="background:#90A4AE; box-shadow:0 6px #546E7A;" onclick="git('menu')">🏠 Geri</button>
-        <div class="kart" id="ogrenme-kart">
-            <h2 id="harf-adi">Harf Seç!</h2>
-            <div class="harf-sekilleri">
-                <div class="sekil-kutu"><small>Tek</small><br><span id="s-tek"></span></div>
-                <div class="sekil-kutu"><small>Baş</small><br><span id="s-bas"></span></div>
-                <div class="sekil-kutu"><small>Orta</small><br><span id="s-orta"></span></div>
-                <div class="sekil-kutu"><small>Son</small><br><span id="s-son"></span></div>
+        <button class="ana-buton" style="background:#90A4AE; box-shadow:0 5px #546E7A;" onclick="git('menu')">🏠 Ana Menü</button>
+        <div class="kart">
+            <h2 id="okul-ad" style="color: var(--ana); margin: 5px;">Harf Seç!</h2>
+            <div class="harf-kart-sekil">
+                <div class="sekil-kutu"><small>Yalnız</small><span id="o-tek">-</span></div>
+                <div class="sekil-kutu"><small>Başta</small><span id="o-bas">-</span></div>
+                <div class="sekil-kutu"><small>Ortada</small><span id="o-orta">-</span></div>
+                <div class="sekil-kutu"><small>Sonda</small><span id="o-son">-</span></div>
             </div>
-            <p id="ipucu" style="font-style: italic; color: #795548;"></p>
+            <p id="okul-ipucu" style="font-style: italic; color: #795548; min-height: 20px;"></p>
         </div>
-        <div id="okul-liste" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;"></div>
+        <div class="lego-izgara" id="okul-liste"></div>
     </div>
 
     <div id="bahce" class="ekran">
-        <button class="ana-buton" style="background:#90A4AE; box-shadow:0 6px #546E7A;" onclick="git('menu')">🏠 Geri</button>
+        <button class="ana-buton" style="background:#90A4AE; box-shadow:0 5px #546E7A;" onclick="git('menu')">🏠 Ana Menü</button>
         <div class="kart">
-            <div id="lego-sonuc" style="font-size: 80px; direction: rtl;">?</div>
-            <div id="lego-oku" style="font-weight: bold; color: var(--ana);">Lego birleştir!</div>
+            <div id="lego-sonuc" class="birlesik-alan">?</div>
+            <div id="lego-oku" style="font-size: 24px; font-weight: bold; color: var(--ana); margin-top: 10px;">Harf ve Hareke Seç!</div>
         </div>
-        <div id="lego-liste" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;"></div>
-        <button class="ana-buton" onclick="temizle()">🧹 Temizle</button>
+
+        <div style="background: rgba(255,255,255,0.8); padding: 10px; border-radius: 20px; margin-bottom: 15px;">
+            <small style="font-weight: bold; color: #546E7A;">Sesi Seç:</small><br>
+            <button class="hareke-btn" title="Üstün" onclick="hSet('َ','e/a')">◌َ</button>
+            <button class="hareke-btn" title="Esre" onclick="hSet('ِ','i/ı')">◌ِ</button>
+            <button class="hareke-btn" title="Ötre" onclick="hSet('ُ','ü/u')">◌ُ</button>
+            <button class="hareke-btn" title="Cezim" onclick="hSet('ْ','')">◌ْ</button>
+            <button class="hareke-btn" title="Şedde" onclick="hSet('ّ','-')">◌ّ</button>
+            <button class="hareke-btn" style="background:#FFAB40; box-shadow: 0 4px #E65100;" title="Uzatma" onclick="hSet('َا','â')">◌َا</button>
+            <button class="hareke-btn" style="background:var(--ana); box-shadow: 0 4px #D84315;" onclick="temizle()">🧹</button>
+        </div>
+
+        <div class="lego-izgara" id="bahce-liste"></div>
     </div>
 
     <script>
         const alfabe = [
-            {ad:"Elif", y:"ا", b:"ا", o:"ـا", s:"ـا", ses:"E/A", ipucu:"Dimdik duran bir kalem gibi!"},
-            {ad:"Be", y:"ب", b:"بـ", o:"ـبـ", s:"ـب", ses:"B", ipucu:"Altında bir noktası olan bir tabak!"},
-            {ad:"Te", y:"ت", b:"تـ", o:"ـتـ", s:"ـت", ses:"T", ipucu:"Üstünde iki gözü olan gülen bir yüz!"},
-            {ad:"Se", y:"ث", b:"ثـ", o:"ـثـ", s:"ـث", ses:"S", ipucu:"Üstünde üç tane kar tanesi var!"},
-            {ad:"Cim", y:"ج", b:"جـ", o:"ـجـ", s:"ـج", ses:"C", ipucu:"Karnında kocaman bir şeker var!"}
-            // Diğer harfler buraya aynı mantıkla eklenebilir
+            {ad:"Elif", y:"ا", b:"ا", o:"ـا", s:"ـا", ses:"E", i:"Dimdik bir kalem!"},
+            {ad:"Be", y:"ب", b:"بـ", o:"ـبـ", s:"ـب", ses:"B", i:"Altında bir noktası olan tabak!"},
+            {ad:"Te", y:"ت", b:"تـ", o:"ـتـ", s:"ـت", ses:"T", i:"İki gözlü gülen yüz!"},
+            {ad:"Se", y:"ث", b:"ثـ", o:"ـثـ", s:"ـث", ses:"S", i:"Üç kar tanesi!"},
+            {ad:"Cim", y:"ج", b:"جـ", o:"ـجـ", s:"ـج", ses:"C", i:"Karnında şeker var!"},
+            {ad:"Ha", y:"ح", b:"حـ", o:"ـحـ", s:"ـح", ses:"H", i:"Şekeri olmayan Cim!"},
+            {ad:"Hı", y:"خ", b:"خـ", o:"ـخـ", s:"ـخ", ses:"H", i:"Tepesinde noktası var!"},
+            {ad:"Dal", y:"د", b:"د", o:"ـد", s:"ـد", ses:"D", i:"Uçan bir kuş gibi!"},
+            {ad:"Zel", y:"ذ", b:"ذ", o:"ـذ", s:"ـذ", ses:"Z", i:"Noktalı Dal!"},
+            {ad:"Ra", y:"ر", b:"ر", o:"ـر", s:"ـر", ses:"R", i:"Kaydırak gibi!"},
+            {ad:"Ze", y:"ز", b:"ز", o:"ـز", s:"ـز", ses:"Z", i:"Noktalı Ra!"},
+            {ad:"Sin", y:"س", b:"سـ", o:"ـسـ", s:"ـس", ses:"S", i:"Üç tane dişi var!"},
+            {ad:"Şin", y:"ش", b:"şـ", o:"ـşـ", s:"ـş", ses:"Ş", i:"Üç noktalı Sin!"},
+            {ad:"Sad", y:"ص", b:"صـ", o:"ـصـ", s:"ـص", ses:"S", i:"Balon gibi şişkin!"},
+            {ad:"Dad", y:"ض", b:"ضـ", o:"ـضـ", s:"ـض", ses:"D", i:"Noktalı Sad!"},
+            {ad:"Tı", y:"ط", b:"طـ", o:"ـطـ", s:"ـط", ses:"T", i:"Dik duran çubuklu!"},
+            {ad:"Zı", y:"ظ", b:"ظـ", o:"ـظـ", s:"ـظ", ses:"Z", i:"Noktalı Tı!"},
+            {ad:"Ayn", y:"ع", b:"عـ", o:"ـعـ", s:"ـع", ses:"A", i:"Ağzı açık bir kuş!"},
+            {ad:"Gayn", y:"غ", b:"غـ", o:"ـغـ", s:"ـغ", ses:"Ğ", i:"Noktalı Ayn!"},
+            {ad:"Fe", y:"ف", b:"فـ", o:"ـفـ", s:"ـف", ses:"F", i:"Tepesinde bir nokta!"},
+            {ad:"Kaf", y:"ق", b:"قـ", o:"ـقـ", s:"ـق", ses:"K", i:"İki noktalı Fe!"},
+            {ad:"Kef", y:"ك", b:"كـ", o:"ـكـ", s:"ـك", ses:"K", i:"İçinde küçük bir 's' var!"},
+            {ad:"Lam", y:"ل", b:"لـ", o:"ـلـ", s:"ـل", ses:"L", i:"Baston gibi!"},
+            {ad:"Mim", y:"م", b:"مـ", o:"ـمـ", s:"ـم", ses:"M", i:"Küçük bir kafa ve kuyruk!"},
+            {ad:"Nun", y:"ن", b:"نـ", o:"ـnـ", s:"ـn", ses:"N", i:"İçinde bir noktası olan kase!"},
+            {ad:"Vav", y:"و", b:"و", o:"ـو", s:"ـو", ses:"V", i:"Kuyruklu bir kafa!"},
+            {ad:"He", y:"ه", b:"هـ", o:"ـهـ", s:"ـه", ses:"H", i:"İki gözlü bir gözlük!"},
+            {ad:"Ye", y:"ي", b:"يـ", o:"ـيـ", s:"ـي", ses:"Y", i:"Altında iki noktası olan ördek!"},
+            {ad:"Lamelif", y:"لا", b:"لا", o:"ـلا", s:"ـلا", ses:"Lâ", i:"İki harfin kucaklaşması!"}
         ];
 
-        function git(id) {
-            document.querySelectorAll('.ekran').forEach(e => e.classList.remove('aktif'));
-            document.getElementById(id).classList.add('aktif');
+        function git(id) { 
+            document.querySelectorAll('.ekran').forEach(e => e.classList.remove('aktif')); 
+            document.getElementById(id).classList.add('aktif'); 
         }
 
-        // Harf Okulu Başlat
-        const okulListe = document.getElementById('okul-liste');
+        // Listeleri Doldur
+        const oL = document.getElementById('okul-liste');
+        const bL = document.getElementById('bahce-liste');
+        
         alfabe.forEach(h => {
-            const btn = document.createElement('button');
-            btn.className = 'lego-btn';
-            btn.innerHTML = h.y;
-            btn.onclick = () => {
-                document.getElementById('harf-adi').innerText = h.ad;
-                document.getElementById('s-tek').innerText = h.y;
-                document.getElementById('s-bas').innerText = h.b;
-                document.getElementById('s-orta').innerText = h.o;
-                document.getElementById('s-son').innerText = h.s;
-                document.getElementById('ipucu').innerText = h.ipucu;
+            // Okul Listesi Butonları
+            const btnOkul = document.createElement('button');
+            btnOkul.className = 'lego-btn';
+            btnOkul.innerHTML = h.y;
+            btnOkul.onclick = () => {
+                document.getElementById('okul-ad').innerText = h.ad;
+                document.getElementById('o-tek').innerText = h.y;
+                document.getElementById('o-bas').innerText = h.b;
+                document.getElementById('o-orta').innerText = h.o;
+                document.getElementById('o-son').innerText = h.s;
+                document.getElementById('okul-ipucu').innerText = h.i;
             };
-            okulListe.appendChild(btn);
+            oL.appendChild(btnOkul);
+
+            // Bahçe Listesi Butonları
+            const btnBahce = document.createElement('button');
+            btnBahce.className = 'lego-btn';
+            btnBahce.innerHTML = h.y;
+            btnBahce.onclick = () => ekle(h);
+            bL.appendChild(btnBahce);
         });
 
-        // Lego Bahçesi Başlat
-        let kelime = ""; let okunus = "";
-        const legoListe = document.getElementById('lego-liste');
-        alfabe.forEach(h => {
-            const btn = document.createElement('button');
-            btn.className = 'lego-btn';
-            btn.innerHTML = h.y;
-            btn.onclick = () => {
-                kelime += h.y; okunus += h.ses;
-                document.getElementById('lego-sonuc').innerText = kelime;
-                document.getElementById('lego-oku').innerText = okunus;
-                if(kelime.length > 1) balonUcur();
-            };
-            legoListe.appendChild(btn);
-        });
+        // Lego Mantığı
+        let sH = ""; let sS = ""; let kD = [];
+        function hSet(h, s) { sH = h; sS = s; }
 
-        function temizle() { kelime = ""; okunus = ""; document.getElementById('lego-sonuc').innerText = "?"; }
+        function ekle(h) {
+            kD.push({...h, h: sH, s: sS});
+            guncelle();
+            if(kD.length > 1) balonUcur();
+        }
+
+        function guncelle() {
+            let resH = ""; let resS = "";
+            kD.forEach((it, i) => {
+                let shp = it.y;
+                if(kD.length > 1) {
+                    if(i === 0) shp = it.b;
+                    else if(i === kD.length - 1) shp = it.s;
+                    else shp = it.o;
+                }
+                resH += shp + it.h; 
+                resS += it.ses + (it.h === "ّ" ? it.ses : "") + it.s;
+            });
+            document.getElementById('lego-sonuc').innerText = resH;
+            document.getElementById('lego-oku').innerText = "Oku: " + resS.toLowerCase();
+        }
+
+        function temizle() { kD = []; sH = ""; sS = ""; document.getElementById('lego-sonuc').innerText = "?"; document.getElementById('lego-oku').innerText = "Harf ve Hareke Seç!"; }
 
         function balonUcur() {
-            const renkler = ['#FF1744', '#00E676', '#2979FF', '#FFEA00', '#D500F9'];
             for(let i=0; i<15; i++) {
                 setTimeout(() => {
                     const b = document.createElement('div'); b.className = 'balon';
                     b.style.left = Math.random() * 90 + 'vw';
-                    b.style.backgroundColor = renkler[Math.floor(Math.random() * renkler.length)];
+                    b.style.backgroundColor = ['#FF1744','#00E676','#2979FF','#FFEA00','#D500F9'][Math.floor(Math.random()*5)];
                     document.body.appendChild(b);
+                    setTimeout(() => b.remove(), 4000);
                 }, i * 100);
             }
         }
