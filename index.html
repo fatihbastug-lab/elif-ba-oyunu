@@ -1,0 +1,39 @@
+<div id="game-container" style="position:relative; height:400px; background:#fff; overflow:hidden; border-radius:20px;">
+    </div>
+
+<script>
+    // Harflerin internetteki hazır linkleri (Örnek set)
+    const harfler = [
+        {ad: 'Elif', simge: 'ا', ses: 'https://kuran.diyanet.gov.tr/sounds/elifba/1.mp3'},
+        {ad: 'Be', simge: 'ب', ses: 'https://kuran.diyanet.gov.tr/sounds/elifba/2.mp3'},
+        {ad: 'Te', simge: 'ت', ses: 'https://kuran.diyanet.gov.tr/sounds/elifba/3.mp3'}
+        // Burayı tüm alfabe için otomatik doldurabiliriz
+    ];
+
+    function balonOlustur() {
+        const container = document.getElementById('game-container');
+        const harf = harfler[Math.floor(Math.random() * harfler.length)];
+        
+        const balon = document.createElement('div');
+        balon.className = 'balon';
+        balon.innerHTML = harf.simge;
+        balon.style.left = Math.random() * 80 + '%';
+        balon.style.position = 'absolute';
+        balon.style.fontSize = '50px';
+        balon.style.cursor = 'pointer';
+        balon.style.transition = 'top 4s linear';
+        balon.style.top = '400px';
+
+        balon.onclick = () => {
+            new Audio(harf.ses).play(); // Diyanet sesini çalar
+            balon.style.display = 'none'; // Patlama efekti eklenebilir
+            alert("Harika! Bu bir " + harf.ad);
+        };
+
+        container.appendChild(balon);
+        setTimeout(() => { balon.style.top = '-100px'; }, 100);
+    }
+
+    // Her 3 saniyede bir yeni harf uçsun
+    setInterval(balonOlustur, 3000);
+</script>
